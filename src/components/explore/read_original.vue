@@ -1,0 +1,229 @@
+<template>
+  <div v-scroll="onScroll"
+  :style="cssProps">
+  <v-layout justify-space-between row wrap>
+    <v-flex>
+    <chapter-menu></chapter-menu>
+    </v-flex>
+    <v-flex class="pa-2 text-xs-center body-2">
+    <button>{{GET_salutation}}</button>
+    </v-flex>
+    <v-flex>
+    <verse-menu></verse-menu>
+  </v-flex>
+  </v-layout>
+  <v-divider :dark="GET_dark"></v-divider>
+  <chapterCarousel></chapterCarousel>
+  <v-divider :dark="GET_dark"></v-divider>
+
+  <div
+  class="mx-0 background lighten-1"
+  max-width="500"
+  :dark="GET_dark"
+  >
+  <v-card flat dark class="mt-3">
+    <v-img
+    :src="this.chapterPreviewImage"
+    gradient="to top, rgba(0,0,0,.44), rgba(0,0,0,.44)"
+    >
+    <!-- <v-btn icon fab top left fixed large class="mt-4" @click="decrementChapter()"> <v-icon large> keyboard_arrow_left  </v-icon> </v-btn>
+    <v-btn icon fab top right fixed large class="mt-4" @click="incrementChapter()"> <v-icon  large> keyboard_arrow_right </v-icon> </v-btn> -->
+    <v-container fill-height >
+      <v-layout column>
+
+        <v-layout row align-start justify-start>
+          <v-btn fab small light  @click="decrementChapter()"> <v-icon  large> keyboard_arrow_left  </v-icon> </v-btn>
+          <v-spacer></v-spacer>
+          <v-btn fab small light @click="incrementChapter()"> <v-icon  large> keyboard_arrow_right </v-icon> </v-btn>
+        </v-layout>
+
+          <v-layout class="mt-5 pt-5 mb-0">
+            <span v-if="chapter < 19" class="display-2 font-weight-light mr-1 mt-0">{{chapter}}</span>
+              <span class="title font-weight-light">
+                {{ convert(this.GET_preview_chapter.title1) }} </br>
+                <span class="caption font-weight-light">  {{this.GET_preview_chapter.titleEnglish}} </span>
+              </span>
+            </v-layout>
+            </v-layout>
+
+      </v-container>
+    </v-img>
+  </v-card>
+  <readNavigation> </readNavigation>
+  <!-- <v-btn @click="$vuetify.goTo('#read20', { duration: 300, offset: 0, easing: 'easeInOutCubic'})">
+  <v-icon>arrow_left</v-icon>
+</v-btn> -->
+<v-card-text class="pa-0">
+  <v-container grid-list-md text-xs-left class="pa-0">
+    <v-layout row wrap class="ma-0" justify-center>
+      <v-flex xs12 lg6 class="ma-0" v-if="chapter < 19">
+        <readSummary> </readSummary>
+      </v-flex>
+      <v-flex xs12 lg6 class="ma-0" v-if="chapter < 19">
+        <readOutline> </readOutline>
+      </v-flex>
+      <v-flex xs12 lg6 class="ma-0">
+        <readSalutation> </readSalutation>
+      </v-flex>
+      <v-flex xs12 lg6 class="ma-0">
+        <readStart> </readStart>
+      </v-flex>
+    </v-layout>
+  </v-container>
+  <v-container grid-list-md text-xs-left class="pa-1">
+    <v-layout row wrap>
+      <v-flex  xs12 lg6 v-for="(item, i) in GET_gitapress_chapter" :key="i" class="ma-0 pa-0"   :id="`read${i}`">
+        <v-card class="background ma-2" :dark="GET_dark">
+          <div v-if="i < 4 || loadTheRestOfVerses">
+            <v-layout row align-top>
+              <!-- verse id -->
+              <span class="mx-2 font-weight-light" :style="'color:' + options[theme].emphasis.medium">{{chapter}}|{{item.verse_id}}</span>
+            </v-layout>
+
+
+            <sambandhCard :verse_id="item.verse_id" v-if="showLink"> </sambandhCard>
+            <!-- <v-divider :dark="GET_dark" v-show="showLink"></v-divider> -->
+
+            <uvachCard :verse_id="item.verse_id" v-if="showVerse"> </uvachCard>
+            <shloakCard :verse_id="item.verse_id"  v-if="showVerse"></shloakCard>
+            <!-- <v-divider :dark="GET_dark" v-show="showVerse"></v-divider> -->
+
+            <uvachCard :verse_id="item.verse_id" v-if="showTranslation & !showVerse"> </uvachCard>
+            <bhavarthCard :verse_id="item.verse_id"  v-if="showTranslation"> </bhavarthCard>
+            <!-- <v-divider :dark="GET_dark" v-show="showTranslation"></v-divider> -->
+
+            <anvayaCard :verse_id="item.verse_id"  v-if="showAnvaya"></anvayaCard>
+          </div>
+
+
+        </v-card>
+      </v-flex>
+    </v-layout>
+    <v-flex xs12 lg6 class="ma-0">
+      <readEnd> </readEnd>
+    </v-flex>
+  </v-container>
+
+</v-card-text>
+</div>
+
+</div>
+</template>
+
+<script>
+import { mapState } from 'vuex';
+import { mapActions } from 'vuex';
+import { mapGetters } from 'vuex';
+import { mapMutations } from 'vuex';
+import shloakCard from './subcomponents/shloak-card.vue'
+import anvayaCard from './subcomponents/anvaya-card.vue'
+import sambandhCard from './subcomponents/sambandh-card.vue'
+import bhavarthCard from './subcomponents/bhavarth-card.vue'
+import readheaderCard from './subcomponents/readheader-card.vue'
+import uvachCard from './subcomponents/uvach-card.vue'
+import readNavigation from './subcomponents/read-navigation.vue'
+import readOutline from './subcomponents/read-outline.vue'
+import readSummary from './subcomponents/read-summary.vue'
+import readStart from './subcomponents/read-start.vue'
+import readEnd from './subcomponents/read-end.vue'
+import readSalutation from './subcomponents/read-salutation.vue'
+import chaptermenu from '../reflect/chapter-menu.vue'
+import versemenu from '../reflect/verse-menu.vue'
+import chapterCarousel from './../reflect/chapter-carousel.vue'
+
+import Sanscript from 'Sanscript';
+export default {
+  data: function() {
+    return {
+    }
+  },
+  mounted() {
+    //do something after mounting vue instance
+    self = this
+    this.$nextTick(function () {
+      // this.$vuetify.goTo('#read' + this.verse, { duration: 300, offset: 0, easing: 'easeInOutCubic'})
+    })
+  },
+  computed: {
+    ...mapState('settings', ['options']),
+    ...mapState('coretext', ['preview']),
+    ...mapState('parameters', ['chapter', 'verse', 'script', 'authenticated', 'photoURL', 'theme', 'language', 'breakSandhi',
+    'showLink', 'showTranslation', 'showAnvaya', 'showVerse', 'showNav', 'loadTheRestOfVerses']),
+    ...mapGetters('coretext', ['GET_salutation', 'GET_gitapress_chapter', 'GET_preview_chapter']),
+    ...mapGetters('settings', ['GET_dark']),
+    offsetTop: {get(){return this.$store.state.parameters.offsetTop}, set(value){this.SET_offsetTop(value)}},
+    fabShow: {get(){return this.$store.state.parameters.fabShow}, set(value){this.SET_fabShow(value)}},
+    cssProps() { return {
+      '--bg-hover-color': this.$vuetify.theme.accent1,
+      '--hover-content': JSON.stringify(this.hoverContent),
+      '--mywidth': "75px",
+      '--myfill': "25px",
+      'color': this.options[this.theme].emphasis.medium
+    }
+  },
+  chapterPreviewImage() {
+    let mylink = '/static/img/chapter_preview/previewchapter' + this.chapter + '.jpeg'
+    return mylink
+  }
+},
+methods: {
+  ...mapMutations('parameters', ['incrementChapter', 'decrementChapter',
+  'SET_value', 'SET_breakSandhi', 'SET_offsetTop', 'SET_fabShow', 'SET_showVerse', 'SET_loadTheRestOfVerses']),
+  convert(myinput){
+    return Sanscript.t(myinput, 'iast', this.script);
+  },
+  onScroll (e) {
+    let scrollTemp = window.pageYOffset || document.documentElement.scrollTop
+    if(scrollTemp < this.offsetTop) {
+      this.fabShow = true
+    } else {
+      this.fabShow = false
+    }
+    this.offsetTop = scrollTemp
+    if(scrollTemp > 300) {
+      this.SET_loadTheRestOfVerses(true)
+    }
+  },
+},
+beforeRouteEnter(to, from, next) {
+  next();
+},
+beforeRouteUpdate(to, from, next) {
+  next();
+},
+watch: {
+  verse: function(val){
+    if (!this.loadTheRestOfVerses) {
+      this.SET_loadTheRestOfVerses(true)
+      setTimeout(() => {this.$vuetify.goTo('#read' + (this.verse - 1), { duration: 300, offset: 0, easing: 'easeInOutCubic'})}, 400)
+    } else {
+      this.$vuetify.goTo('#read' + (this.verse - 1), { duration: 300, offset: 0, easing: 'easeInOutCubic'})
+    }
+  }
+},
+updated: function () {
+  this.$nextTick(function () {
+  })
+},
+components: {
+  shloakCard,
+  anvayaCard,
+  sambandhCard,
+  bhavarthCard,
+  readheaderCard,
+  uvachCard,
+  readNavigation,
+  readOutline,
+  readSummary,
+  readStart,
+  readEnd,
+  readSalutation,
+  'chapter-menu': chaptermenu,
+  'verse-menu': versemenu,  
+  chapterCarousel
+}
+}
+</script>
+
+<style lang="scss">
+</style>
