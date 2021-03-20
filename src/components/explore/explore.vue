@@ -18,19 +18,26 @@
       <button class="button-add-example button--green" v-on:click="addItem">+</button>
       <button class="button-train button--green" v-on:click="train">Train</button>
     </div>
-
     <div class="predict-controls">
       <h2 class="section col-sm-1">Predicting</h2>
       <input class="field element" v-model="valueToPredict" type="number" placeholder="Enter an integer number"><br>
       <div class="element" v-html="predictedValue"></div>
       <button class="element button--green" v-on:click="predict" :disabled="!trained">Predict</button>
     </div> -->
+    <v-text-field v-model="message1" clearable> </v-text-field>
+    <v-text-field v-model="message2" clearable> </v-text-field>
+    <v-text-field v-model="message3" clearable> </v-text-field>
+  <div>
+<v-btn @click=queryDB()> pushQuery </v-btn>
+</div>
+    {{this.userdata}}
   </div>
 </template>
 
 <script>
 import * as tf from '@tensorflow/tfjs';
 import * as speechCommands from '@tensorflow-models/speech-commands'
+import { mapState } from "vuex";
 
 export default {
   data() {
@@ -39,13 +46,21 @@ export default {
       xValues: [1,2,3,4],
       yValues: [1,3,5,7],
       predictedValue:'Click on train!',
-      valueToPredict: ''
+      valueToPredict: '',
+      message1: '',
+      message2: '',
+      message3: '',
     }
   },
-  created() {    
-    this.$store.dispatch('firestore/bindUserdata')
-  },
+    computed: {
+    ...mapState("firestore", ["userdata"]),
+    },
   methods: {
+    queryDB() {    
+    this.$store.dispatch('firestore/bindUserdata', 
+    {path: 'users/profiles/signin', 
+    query: [this.message1, this.message2, this.message3]})
+  },
     addItem() {
       this.xValues.push(0);
       this.yValues.push(0);
