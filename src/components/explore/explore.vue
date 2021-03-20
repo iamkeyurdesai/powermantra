@@ -1,11 +1,184 @@
+  
 <template>
-  <div class="ma-2">
-    explore: Coming soon...
+  <div>
+    <!-- <div class="train-controls">
+      <h2 class="section col-sm-1">Training Data (x,y) pairs</h2>
+      <div class="field-label">X</div><div class="field-label">Y</div>
+
+      <div v-for="(item, index) in xValues" v-bind:key="index">
+        <div>
+
+          <div class="col-sm-1">
+            <input class="field field-x" v-model="xValues[index]" type="number">
+            <input class="field field-y" v-model="yValues[index]" type="number">
+          </div>
+      </div>
+      </div>
+
+      <button class="button-add-example button--green" v-on:click="addItem">+</button>
+      <button class="button-train button--green" v-on:click="train">Train</button>
+    </div>
+
+    <div class="predict-controls">
+      <h2 class="section col-sm-1">Predicting</h2>
+      <input class="field element" v-model="valueToPredict" type="number" placeholder="Enter an integer number"><br>
+      <div class="element" v-html="predictedValue"></div>
+      <button class="element button--green" v-on:click="predict" :disabled="!trained">Predict</button>
+    </div> -->
   </div>
 </template>
 
 <script>
+import * as tf from '@tensorflow/tfjs';
+import * as speechCommands from '@tensorflow-models/speech-commands'
+
+export default {
+  data() {
+    return {
+      trained: false,
+      xValues: [1,2,3,4],
+      yValues: [1,3,5,7],
+      predictedValue:'Click on train!',
+      valueToPredict: ''
+    }
+  },
+  created() {    
+    this.$store.dispatch('firestore/bindUserdata')
+  },
+  methods: {
+    addItem() {
+      this.xValues.push(0);
+      this.yValues.push(0);
+    },
+    async train() {
+const baseRecognizer = speechCommands.create('BROWSER_FFT');
+await baseRecognizer.ensureModelLoaded();
+
+// Each instance of speech-command recognizer supports multiple
+// transfer-learning models, each of which can be trained for a different
+// new vocabulary.
+// Therefore we give a name to the transfer-learning model we are about to
+// train ('colors' in this case).
+const transferRecognizer = baseRecognizer.createTransfer('colors');
+
+// Call `collectExample()` to collect a number of audio examples
+// via WebAudio.
+await transferRecognizer.collectExample('red');
+await transferRecognizer.collectExample('green');
+await transferRecognizer.collectExample('blue');
+await transferRecognizer.collectExample('red');
+// Don't forget to collect some background-noise examples, so that the
+// trasnfer-learned model will be able to detect moments of silence.
+await transferRecognizer.collectExample('_background_noise_');
+await transferRecognizer.collectExample('green');
+await transferRecognizer.collectExample('blue');
+await transferRecognizer.collectExample('_background_noise_');
+// ... You would typically want to put `collectExample`
+//     in the callback of a UI button to allow the user to collect
+//     any desired number of examples in random order.
+
+// You can check the counts of examples for different words that have been
+// collect for this transfer-learning model.
+console.log(transferRecognizer.countExamples());
+// e.g., {'red': 2, 'green': 2', 'blue': 2, '_background_noise': 2};
+
+// Start training of the transfer-learning model.
+// You can specify `epochs` (number of training epochs) and `callback`
+// (the Model.fit callback to use during training), among other configuration
+// fields.
+await transferRecognizer.train({
+  epochs: 25,
+  callback: {
+    onEpochEnd: async (epoch, logs) => {
+      console.log(`Epoch ${epoch}: loss=${logs.loss}, accuracy=${logs.acc}`);
+    }
+  }
+});
+console.log(transferRecognizer.serializeExamples(['red', 'blue']));
+
+// After the transfer learning completes, you can start online streaming
+// recognition using the new model.
+await transferRecognizer.listen(result => {
+  // - result.scores contains the scores for the new vocabulary, which
+  //   can be checked with:
+  const words = transferRecognizer.wordLabels();
+  // `result.scores` contains the scores for the new words, not the original
+  // words.
+  for (let i = 0; i < words; ++i) {
+    console.log(`score for word '${words[i]}' = ${result.scores[i]}`);
+  }
+}, {probabilityThreshold: 0.75});
+
+// Stop the recognition in 10 seconds.
+setTimeout(() => transferRecognizer.stopListening(), 100e3);
+    },
+    train1() {
+      // Define a model for linear regression.
+      const model = this.model = tf.sequential();
+      model.add(tf.layers.dense({units: 1, inputShape: [1]}));
+      // Prepare the model for training: Specify the loss and the optimizer.
+      model.compile({loss: 'meanSquaredError', optimizer: 'sgd'});
+      const xs = tf.tensor2d(this.xValues, [this.xValues.length, 1]);
+      const ys = tf.tensor2d(this.yValues, [this.yValues.length, 1]);
+      // Train the model using the data.
+      model.fit(xs, ys, {epochs: 50}).then(() => {
+        this.trained = true;
+        this.predictedValue = 'Ready for making predictions';
+      });
+    },
+    predict() {
+      // Use the model to do inference on a data point the model hasn't seen before:
+      this.predictedValue = this.model.predict(tf.tensor2d([this.valueToPredict], [1, 1])).get(0, 0);
+    }
+  }
+}
 </script>
 
-<style lang="scss" scoped>
+<style>
+.field, .field-label {
+  height: 30px;
+  float: left;
+  padding: 0px 15px;
+  float: left;
+  width: 50%;
+}
+.field {
+  border-radius: 0px 5px 5px 0px;
+  border: 1px solid #eee;
+  margin-bottom: 15px;
+  height: 40px;
+}
+.col-sm-1:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+.section, .field-label {
+  text-align: left;
+  font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* 1 */
+  font-weight: 100;
+}
+.field-label {
+  font-weight: 700;
+}
+.button-add-example {
+  width: 100%;
+  margin-bottom: 10px;
+}
+.button-train {
+  width: 100%;
+}
+.predict-controls {
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+.predict-controls .element {
+  width: 50%;
+  display: block;
+}
+button {
+  margin-top: 10px;
+  font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* 1 */
+  font-weight: 700;
+}
 </style>

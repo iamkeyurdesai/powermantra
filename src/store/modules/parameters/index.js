@@ -14,7 +14,7 @@ const state = {
   script: 'iast',
   fsize: 'medium',
   fabShow: true,
-  isDeveloper: false,
+  isDeveloper: false
 };
 
 export default {
@@ -22,5 +22,5 @@ export default {
   state,
   actions,
   getters,
-  mutations,
+  mutations
 };

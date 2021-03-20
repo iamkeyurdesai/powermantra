@@ -31,7 +31,7 @@ function SET_value(state, { list, id }) {
     state[id] = list;
   }
 }
-  
+
 export default {
   SET_mainItem,
   SET_authenticated,

@@ -42,7 +42,7 @@
     </v-main>
 
     <!-- dynamic bottom navigation -->
-    <v-bottom-navigation v-model="mainItem" app height="48" grow>
+    <v-bottom-navigation v-model="mainItem" app height="56" grow>
       <v-btn
         v-for="(zz, k) in menu.mainItems"
         :key="zz"

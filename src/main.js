@@ -36,7 +36,9 @@ router.beforeEach((to, from, next) => {
 })
 
 // import additional library
-import firebase from 'firebase'
+import firebase from 'firebase/app'
+import 'firebase/firestore'
+import 'firebase/auth'
 import {config} from './helpers/firebaseConfig'
 // import { firestorePlugin, rtdbPlugin } from 'vuefire'
 // Vue.use(firestorePlugin)
@@ -108,7 +110,11 @@ new Vue({
   vuetify,
   router,
   store,
-  render: h => h(App)
+  render: h => h(App),
+  created() {
+    db.enablePersistence({synchronizeTabs:true}).then(()=>{console.log("offline persistence enabled!")})
+    //this.$store.dispatch('firestore/bindUserdata')
+  }
 }).$mount('#app')
 
 

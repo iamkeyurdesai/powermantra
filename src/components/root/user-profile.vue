@@ -34,7 +34,7 @@
 <script>
 import { mapState } from 'vuex'
 import { mapMutations } from 'vuex'
-import firebase from 'firebase'
+import firebase from 'firebase/app'
 
 export default {
 data () {

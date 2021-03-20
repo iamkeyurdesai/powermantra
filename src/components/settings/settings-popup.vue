@@ -65,7 +65,7 @@ export default {
   }),
   computed: {
     ...mapState("settings", ["options"]),
-    ...mapState("parameters", ["themeDark", "script"]),
+    ...mapState("parameters", ["themeDark", "script", "userdata"]),
     ...mapGetters("settings", ["GET_dark"]),
     themeDark: {
       get() {
@@ -73,7 +73,8 @@ export default {
       },
       set(value) {
         this.SET_themeDark(value);
-        this.$vuetify.theme.isDark=value
+        this.$vuetify.theme.isDark=value                
+        console.log(this.$store.state.firestore)
       },
     },
     script: {

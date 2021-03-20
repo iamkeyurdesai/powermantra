@@ -10,7 +10,7 @@ export const options = {
     'bengali',
     'gurmukhi',
     'oriya',
-    // 'itrans'
+    'itrans'
   ],
   script1: {
     iast: "English",
@@ -23,7 +23,7 @@ export const options = {
     bengali: 'bengaalee',
     gurmukhi: 'gurmukhI',
     oriya: "OrIyA" ,
-    // itrans: "English 2"
+    itrans: "English-easy"
   },
   fsize: ['small', 'medium', 'big'],
   fsizeInternal: {small: 'body-1', medium: 'subheading', big: 'title'},
