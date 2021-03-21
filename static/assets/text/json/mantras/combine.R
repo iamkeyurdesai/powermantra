@@ -1,31 +1,61 @@
 library(tidyverse)
-dir("./projects/web/powermantra/static/assets/text/json/mantras/onebyone/") -> myfiles
-myoutput <- NULL
-errmsg <- NULL
-for(i in 1:length(myfiles)) {
-  mytmp <- readLines(
-    sprintf("./projects/web/powermantra/static/assets/text/json//mantras/onebyone/mymantra_%d.json", i)
-    )
+
+setwd("/Users/keyurdesai/projects/web/powermantra/static/assets/text/json/mantras/")
+
+mergeFiles <- function(begin, end) {
+  mydir <- sprintf("onebyone/%d_%d",begin, end)
+  mymergedfile <- sprintf("/merged/mantra_%d_%d.json", begin, end) 
+  list.files(mydir, full.names = TRUE) -> myfilesToMerge
   
-  if(as.integer(str_replace(str_replace(mytmp[2], "\"id\":", ""), ",", "")) != i) {
-    print(errmsg <- paste("id mismtach at:", i))
-    break
-  } else {
-    if(i == 1) {
-      myoutput <- mytmp
+  myoutput <- NULL
+  errmsg <- NULL
+  for(i in begin:end) {
+    myfile <- sprintf("./%s/mymantra_%d.json", mydir, i)
+    mytmp <- readLines(myfile)
+    if(as.integer(str_replace(str_replace(mytmp[2], "\"id\":", ""), ",", "")) != i) {
+      print(errmsg <- paste("id mismtach at:", i))
+      break
     } else {
-    myoutput <- c(myoutput, ",", mytmp)
+      if(i == begin) {
+        myoutput <- mytmp
+      } else {
+        myoutput <- c(myoutput, ",", mytmp)
+      }
     }
+    print(myfile)
   }
-  print(i)
-}
-if(is.null(errmsg)) {
-myoutput <- c("[", myoutput, "]")
-tibble(myoutput = myoutput) -> myoutput1
-myoutput1 %>%
-  filter(trimws(myoutput)!="") -> myfinal
-print(paste("blank rows removed: ", nrow(myoutput1) - nrow(myfinal)))
-print("success: created mymantras_combined.json")
-writeLines(myfinal$myoutput,"./projects/web/powermantra/static/assets/text/json/mantras/mymantras_combined.json")
+  print(myfilesToMerge)
+  print(mymergedfile)
+  
+  
+  if(is.null(errmsg)) {
+    myoutput <- c("[", myoutput, "]")
+    tibble(myoutput = myoutput) -> myoutput1
+    myoutput1 %>%
+      filter(trimws(myoutput)!="") -> myfinal
+    print(paste("blank rows removed: ", nrow(myoutput1) - nrow(myfinal)))
+    writeLines(myfinal$myoutput, paste0(".", mymergedfile))
+    print(sprintf("success: created %s", paste0(".", mymergedfile)))
+  }
+  
+  ans <- tibble(myMergedFile = mymergedfile, myTimeStamp = timestamp()) 
+  return(ans)
 }
 
+#create the combine file for the items in 1_3
+mergeFiles(1,3) -> addEntry
+mergeFiles(4,6) -> addEntry
+#create / update the .json that keeps track of the combined files
+#the loadText() will use this file to keep track of what files to load
+library(jsonlite)
+if(!file.exists("./myFilesToLoad.Json")) {
+  writeLines(prettify(toJSON(addEntry)), "./myFilesToLoad.Json")
+  print("success: created ./myFilesToLoad.Json")
+} else {
+fromJSON("./myFilesToLoad.Json") -> myCurrentEntries
+myCurrentEntries %>% 
+  filter(myMergedFile != addEntry$myMergedFile) %>%
+  bind_rows(addEntry) -> myOutput
+writeLines(prettify(toJSON(myOutput)), "./myFilesToLoad.Json")
+print("success: updated ./myFilesToLoad.Json")
+}

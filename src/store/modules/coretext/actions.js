@@ -2,58 +2,32 @@ import axios from 'axios';
 
 const loadText = function ({ commit }) {
   const ax = axios.create({
-  // baseURL: 'https://gitawebapp.firebaseapp.com/static/'
-  baseURL: '/static/'
+    baseURL: '/assets/text/json/mantras/'
+    //baseURL: 'https://powermantra.web.app/assets/text/json/mantras/'
   })
-  ax.get('assets/text/json/mygitapress_preview.json', { crossdomain: true}).then((response) => {
-    commit('setText', { list: response.data,  id: "preview"})
+
+  ax.get('myFilesToLoad.json', { crossdomain: true }).then((response) => {
+    commit('setText', { list: response.data, id: "myFilesToLoad" })
   }, (err) => {
     console.log(err)
-  });
-  ax.get('assets/text/json/mygitapress_summary.json', { crossdomain: true}).then((response) => {
-    commit('setText', { list: response.data,  id: "summary"})
-  }, (err) => {
-    console.log(err)
-  });
-  ax.get('assets/text/json/mymain.json', { crossdomain: true}).then((response) => {
-    commit('setText', { list: response.data,  id: "main"})
-  }, (err) => {
-    console.log(err)
-  });
-  ax.get('assets/text/json/mygitapress.json', { crossdomain: true}).then((response) => {
-    commit('setText', { list: response.data,  id: "gitapress"})
-  }, (err) => {
-    console.log(err)
-  });
-  // ax.get('assets/text/json/mygitapress_commentary.json', { crossdomain: true}).then((response) => {
-  //   commit('setText', { list: response.data,  id: "gitapress_commentary"})
-  // }, (err) => {
-  //   console.log(err)
-  // });
-  ax.get('assets/text/json/mysivananda_translation.json', { crossdomain: true}).then((response) => {
-    commit('setText', { list: response.data,  id: "sivananda"})
-  }, (err) => {
-    console.log(err)
-  });
-  // ax.get('assets/text/json/mysivananda_commentary.json', { crossdomain: true}).then((response) => {
-  //   commit('setText', { list: response.data,  id: "sivananda_commentary"})
-  // }, (err) => {
-  //   console.log(err)
-  // });
-  // ax.get('assets/text/json/myLabels.json', { crossdomain: true}).then((response) => {
-  //   commit('setText', { list: response.data,  id: "sanskritLabels"})
-  // }, (err) => {
-  //   console.log(err)
-  // });
-  ax.get('assets/text/json/sanskrit_alphabet.json', { crossdomain: true}).then((response) => {
-    commit('setText', { list: response.data,  id: "sanskritAlphabet"})
-  }, (err) => {
-    console.log(err)
-  });
-  ax.get('assets/text/json/myMP3s.json', { crossdomain: true}).then((response) => {
-    commit('setText', { list: response.data,  id: "youtubeIDs"})
-  }, (err) => {
-    console.log(err)
+  }).then(() => {
+    let tmp = this.state.coretext.myFilesToLoad
+    let i;
+    for (i = 0; i < tmp.length; i++) {
+      ax.get(tmp[i].myMergedFile, { crossdomain: true }).then((response) => {
+        if (i == 0) {
+          this.state.coretext.mantras.push(response.data)
+        } else {
+          let j;
+          for (j = 0; j < response.data.length; j++) {
+            this.state.coretext.mantras.push(response.data[j])
+          }
+        }
+      }
+      )
+    }
+  }).then(() => {
+    console.log(this.state.coretext.mantras)
   });
 };
 
