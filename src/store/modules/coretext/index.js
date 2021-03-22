@@ -5,6 +5,7 @@ import mutations from './mutations';
 const state = {
   myFilesToLoad: [],
   mantras: [],  
+  indexMantras: null
 };
 
 export default {

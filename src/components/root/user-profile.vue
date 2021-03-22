@@ -40,9 +40,9 @@ export default {
 data () {
   return {
     myLoginMenu: [
-     { title: 'History' },
-     { title: 'Account' },
-     { title: 'Profile' },
+    //  { title: 'History' },
+    //  { title: 'Account' },
+    //  { title: 'Profile' },
      { title: 'Signout' }]
   }
 },

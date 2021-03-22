@@ -1,12 +1,12 @@
 <template>
-  <div class="ma-2">
+  <v-card>
     render item: Coming soon...
-  </div>
+  </v-card>    
 </template>
 
 
 <script>
-import addToPlaylist from "./subcomponents/add-to-playlist";
+// import addToPlaylist from "./subcomponents/add-to-playlist";
 export default {
   data () {
     return {

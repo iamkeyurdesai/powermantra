@@ -1,10 +1,10 @@
 const setText = (state, { list, id }) => {
 state[id] = list;
 }
-const SET_indexWord = (state, input) => {
-  state.indexWord = input
+const SET_indexMantras = (state, input) => {
+  state.indexMantras = input
 }
 export default {
   setText,
-  SET_indexWord
+  SET_indexMantras
 }

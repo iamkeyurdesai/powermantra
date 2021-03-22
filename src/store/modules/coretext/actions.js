@@ -5,7 +5,7 @@ const loadText = function ({ commit }) {
     baseURL: '/assets/text/json/mantras/'
     //baseURL: 'https://powermantra.web.app/assets/text/json/mantras/'
   })
-
+  
   ax.get('myFilesToLoad.json', { crossdomain: true }).then((response) => {
     commit('setText', { list: response.data, id: "myFilesToLoad" })
   }, (err) => {
