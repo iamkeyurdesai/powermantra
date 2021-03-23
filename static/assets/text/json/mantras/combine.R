@@ -48,14 +48,14 @@ mergeFiles(4,6) -> addEntry
 #create / update the .json that keeps track of the combined files
 #the loadText() will use this file to keep track of what files to load
 library(jsonlite)
-if(!file.exists("./myFilesToLoad.Json")) {
-  writeLines(prettify(toJSON(addEntry)), "./myFilesToLoad.Json")
-  print("success: created ./myFilesToLoad.Json")
+if(!file.exists("./myFilesToLoad.json")) {
+  writeLines(prettify(toJSON(addEntry)), "./myFilesToLoad.json")
+  print("success: created ./myFilesToLoad.json")
 } else {
-fromJSON("./myFilesToLoad.Json") -> myCurrentEntries
+fromJSON("./myFilesToLoad.json") -> myCurrentEntries
 myCurrentEntries %>% 
   filter(myMergedFile != addEntry$myMergedFile) %>%
   bind_rows(addEntry) -> myOutput
-writeLines(prettify(toJSON(myOutput)), "./myFilesToLoad.Json")
-print("success: updated ./myFilesToLoad.Json")
+writeLines(prettify(toJSON(myOutput)), "./myFilesToLoad.json")
+print("success: updated ./myFilesToLoad.json")
 }

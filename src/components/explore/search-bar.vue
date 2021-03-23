@@ -91,14 +91,12 @@ export default {
     ...mapState("coretext", ["mantras", "indexMantras"]),
   },
   watch: {
-    focus() {
+    myQuery(val) {
+      console.log(val);      
       if (this.indexMantras === null) {
         this.createSearch();
         console.log("I created index");
       }
-    },
-    myQuery(val) {
-      console.log(val);      
       this.searchQuery(val);
     },
   },
@@ -109,7 +107,7 @@ export default {
       let temp = [];
       // add id to every entry
       let ix = 0;
-      for (var j = 0; j < this.mantras.length; j++) {
+      for (var j = 0; j < 6; j++) {
         temp.push({
           id: ix,
           name: this.makeCopy(this.mantras[j].name),

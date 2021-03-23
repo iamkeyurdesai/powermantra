@@ -1,6 +1,8 @@
 {
     "id": 1,
     "linkto": null,
+    "priority": null,
+    "popularity": null,
     "name": "",
     "functionality" : 1,
     "category": "",
@@ -11,6 +13,7 @@
     "shakti": "",
     "pin": "",
     "application": "",
+    "benefits": "",
     "significance": "",
     "youtube": "",
     "video": "",

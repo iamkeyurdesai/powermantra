@@ -4,8 +4,10 @@ import './registerServiceWorker'
 import vuetify from './plugins/vuetify';
 import router from './router'
 import {store} from './store/index.js'
-
-
+import AudioVisual from 'vue-audio-visual'
+import VueYoutube from 'vue-youtube'
+Vue.use(VueYoutube)
+Vue.use(AudioVisual)
 
 Vue.config.productionTip = false
 Vue.config.performance = true
