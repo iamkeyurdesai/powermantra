@@ -12,19 +12,19 @@
           clearable
           label="Search Power Mantra"
           type="text"
-          @focus="focus = true"
-          @blur="focus = false"
+          @input="focus = true"          
           @click:clear="myQuery = ''"
           :rounded="!focus"
           :shaped="focus"
-        ></v-text-field>
+        >
+        </v-text-field>
         <v-card v-if="focus" class="ma-0">
           <v-card max-height="35vh" class="overflow-y-auto">
-            <div class="mb-2" flat v-for="item in searchResults" :key="item.message">
-              {{ item }}
+            <div class="mb-2" flat v-for="item in searchResults" :key="item.name" @click="SET_searchSelect(item.id); focus = false">
+              {{ item }} 
             </div>
           </v-card>
-        </v-card>
+        </v-card>        
       </v-col>
     </v-row>
     <v-row>
@@ -72,8 +72,8 @@ export default {
         "Diety",
         "Quality",
         "Category",
-        "Application",
-        "Popularity",
+        "Benefits",
+        //"Popularity",
       ],
       filterSelected: null,
       nextFilterOptions: ["a", "b", "c", "d", "e", "f", "g", "h", "i"],
@@ -83,8 +83,8 @@ export default {
       myQuery: "",
       marker: true,
       focus: false,      
-      searchResults: [],
       index: null,
+      searchResults: [],
     };
   },
   computed: {
@@ -102,6 +102,7 @@ export default {
   },
   methods: {
     ...mapMutations("coretext", ["SET_indexMantras"]),
+    ...mapMutations("parameters", ["SET_searchSelect"]),
     createSearch() {
       //make a local copy
       let temp = [];
@@ -145,7 +146,7 @@ export default {
         // resolution: 12,
         tokenize: "strict",
         // encode: "false",
-      });      
+      });            
     },
   },
 };

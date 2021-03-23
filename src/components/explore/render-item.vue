@@ -39,12 +39,11 @@
               <v-expansion-panel-content>
                 <div>
                   <v-card-text>
-                    This is a <strong>bija</strong> mantra. The diety of this
-                    mantra is <strong>diety</strong> and the seer is unknown.
-                    This mantra embodies the quality of <strong>peace</strong>.
+                    This is a <strong>{{myMantra.category}}</strong> mantra. The diety of this
+                    mantra is <strong>{{myMantra.deity}}</strong>.
+                    This mantra embodies the quality of <strong>{{myMantra.quality}}</strong>.
                     Chanting this mantra will grant the benefits of
-                    <strong>peace</strong> and <strong>tranquility</strong>.
-                    Keep reading more for
+                    <strong>{{myMantra.benefits}}</strong>.
                   </v-card-text>
                   <v-tabs v-model="tab" right>
                     <v-tab
@@ -59,7 +58,7 @@
                   <v-tabs-items v-model="tab">
                     <v-tab-item v-for="item in items" :key="item">
                       <v-card color="basil" flat>
-                        <v-card-text>{{ text }}</v-card-text>
+                        <v-card-text>{{ myMantra[item] }}</v-card-text>
                       </v-card>
                     </v-tab-item>
                   </v-tabs-items>
@@ -86,12 +85,14 @@
             <v-btn color="success" text small @click="showYoutube=false"><v-icon small>mdi-close</v-icon></v-btn>
             </div> 
             <youtube
-              video-id="lG0Ys-2d4MA"
+              :video-id="myMantra.youtube.split('=')[1]"
               ref="youtube"
               fitParent              
             ></youtube>
           </div>
-          <renderMantra></renderMantra>
+          <div v-if="myMantra.id">
+          <renderMantra :whichMantra="myMantra.id"></renderMantra>          
+          </div>
         </v-card>
       </v-col>
     </v-row>
@@ -100,13 +101,14 @@
 
 
 <script>
+import { mapState } from "vuex";
 // import addToPlaylist from "./subcomponents/add-to-playlist";
 import renderMantra from "./subcomponents/render-mantra";
 export default {
   data() {
     return {      
       tab: null,
-      items: ["Significance", "Benefits", "How to chant"],
+      items: ["significance", "benefits", "howto"],
       text:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
       showAudio: false,
@@ -117,6 +119,13 @@ export default {
   components: {
     renderMantra
   },
+  computed: {
+    ...mapState('parameters', ['searchSelect']),
+    ...mapState('coretext', ['mantras']),
+    myMantra() {
+      return this.mantras[this.searchSelect]
+    }
+  }
 };
 </script>
  <style lang="scss" scoped>

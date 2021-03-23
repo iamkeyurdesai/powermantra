@@ -14,7 +14,8 @@ const state = {
   script: 'iast',
   fsize: 'medium',
   fabShow: true,
-  isDeveloper: false
+  isDeveloper: false,
+  searchSelect: null,
 };
 
 export default {

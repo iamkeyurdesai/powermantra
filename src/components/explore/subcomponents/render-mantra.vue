@@ -7,7 +7,9 @@
 import renderOneVerse from './render-oneverse'
 export default {
   data () {
-    
+    return {
+      
+    }
   },
   components: {
     renderOneVerse

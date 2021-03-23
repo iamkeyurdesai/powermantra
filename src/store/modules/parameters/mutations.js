@@ -31,6 +31,10 @@ function SET_value(state, { list, id }) {
     state[id] = list;
   }
 }
+const SET_searchSelect = (state, input) => {
+  state.searchSelect = input
+}
+
 
 export default {
   SET_mainItem,
@@ -41,5 +45,6 @@ export default {
   SET_themeDark,
   SET_script,
   SET_userClaims,
-  SET_value
+  SET_value,
+  SET_searchSelect,
 };

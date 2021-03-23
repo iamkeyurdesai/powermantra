@@ -1,5 +1,5 @@
 {
-    "id": 1,
+    "id": 4,
     "linkto": null,
     "priority": 1,
     "popularity": 1,
@@ -40,7 +40,9 @@
         ["(OM=Om) (bhUH=earthly plane),(bhuvaH=galactic plane) (svaH=celestial plane)", "(tat=that),(savitur=the Sun),(vareNyaM=fit to be worshipped)", "(bhargaH=rediance) (devasya=God's) (dhImahi=I meditate)", "(dhiyaH=intellect) (yaH=that) (naH=our) (prachodayAt.h=awaken)"]
     ],
     "wordhindi": [],
-    "mantraenglish": [],
+    "mantraenglish": [
+        ["Om! Harmony with all planes of existence! I meditate on the divine rediance of the sun who is fit to be worshipped (due to the life giving quality) and may he awaken and illuminate our intellect!"]
+    ],
     "mantrahindi": [],
     "preludeenglish": [],
     "preludehindi": [],
