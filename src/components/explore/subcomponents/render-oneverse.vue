@@ -1,6 +1,6 @@
 <template>
   <div>
-    <span class="info--text ma-3 pa-2"> {{ myMantraByProperty('name') }} in Sanskrit</span>
+    <span class="info--text ma-0 pa-4"> {{ myMantraByProperty('name') }} in Sanskrit</span>
     <div class="d-flex justify-center mb-3">
       <div align="left">
         <span v-for="(item, i) in myMantra" :key="item + i">
@@ -33,10 +33,9 @@
         </span>
       </div>
 
-      <v-btn text x-small rounded class="text--secondary">
+      <v-btn text x-small rounded class="text--secondary" >
         <v-icon
-          small
-          class="mx-1"
+          small          
           @click="secondScriptOn = false"
           v-if="secondScriptOn"
           >mdi-close</v-icon
@@ -51,25 +50,24 @@
         >
       </v-btn>
     </div>
-    <span class="info--text ma-3 pa-2"> {{ myMantraByProperty('name') }} in English</span>
-
+    <v-row justify="space-between" class="ma-0 px-4">
+    <span class="info--text"> {{ myMantraByProperty('name') }} in English</span>
       <v-btn text x-small rounded class="text--secondary">
-        <v-icon
-          small
+        <v-icon                  
           class="mx-1"
           @click="transOn = false"
           v-if="transOn"
-          >mdi-close</v-icon
+          >mdi-chevron-down</v-icon
         >
-        <v-icon
-          small
+        <v-icon          
           class="mx-1"
           @click="transOn = true"
           v-if="!transOn"
         >
-          mdi-plus</v-icon
+          mdi-chevron-up</v-icon
         >
       </v-btn>
+    </v-row>
     <div v-if="transOn">
       <v-card-text class="ma-0" v-html="myMantraByProperty('mantraenglish')[0]">
       </v-card-text>
@@ -83,9 +81,9 @@ import { mapState } from "vuex";
 import Sanscript from "sanscript";
 export default {
   props: {
-    whichMantra: Number,
+    mantra: Object,
     whichVerse: Number,
-    whatScript: String,
+    script: String,
   },
   data() {
     return {
@@ -110,10 +108,10 @@ export default {
   methods: {
     convert(myinput, option) {
       if (option === "primary") {
-        return Sanscript.t(myinput, "itrans", this.whatScript);
+        return Sanscript.t(myinput, "itrans", this.script);
       } else {
         let secondScript = "iast";
-        if (this.whatScript === "iast" || this.whatScript === "itrans") {
+        if (this.script === "iast" || this.script === "itrans") {
           secondScript = "devanagari";
         }
         return Sanscript.t(myinput, "itrans", secondScript);

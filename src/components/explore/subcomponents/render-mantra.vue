@@ -1,14 +1,19 @@
 <template>
 <div>
-<renderOneVerse  :whichMantra="myMantra.id" :whichVerse="0" :whatScript="script"> </renderOneVerse>
+<renderOneVerse  v-for="(item, i) in mantra.mantra" :key="i"
+:mantra="mantra" :whichVerse="i" :script="script"> </renderOneVerse>
 </div>
 </template>
 
 
 <script>
 import renderOneVerse from './render-oneverse'
-import { mapState } from "vuex";
+// import { mapState } from "vuex";
 export default {
+  props: {    
+    script: String,
+    mantra: Object
+  },
   data () {
     return {
 
@@ -17,12 +22,10 @@ export default {
   components: {
     renderOneVerse
   },
-  computed: {
-    ...mapState('parameters', ['searchSelect', 'script']),
-    ...mapState('coretext', ['mantras']),
-    myMantra() {
-      return this.mantras[this.searchSelect]
-    }
+  computed: {    
+    // myMantra() {
+    //   return this.mantras[this.searchSelect]
+    // }
   }
 }
 </script>

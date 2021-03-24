@@ -22,18 +22,24 @@ const SET_script = (state, input) => {
 const SET_userClaims = (state, input) => {
   state.userClaims = input
 };
+// function SET_value(state, { list, id }) {
+//   if (id == 'chapter' || id == 'verse') {
+//     state[id] = parseInt(list);
+//   } else if (id == 'breakSandhi') {
+//     state[id] = (list == 'true');
+//   } else {
+//     state[id] = list;
+//   }
+// }
 function SET_value(state, { list, id }) {
-  if (id == 'chapter' || id == 'verse') {
-    state[id] = parseInt(list);
-  } else if (id == 'breakSandhi') {
-    state[id] = (list == 'true');
-  } else {
     state[id] = list;
-  }
 }
 const SET_searchSelect = (state, input) => {
   state.searchSelect = input
 }
+// const SET_chantingON = (state, input) => {
+//   state.searchSelect = input
+// }
 
 
 export default {

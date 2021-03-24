@@ -20,7 +20,8 @@
         </v-text-field>
         <v-card v-if="focus" class="ma-0">
           <v-card max-height="35vh" class="overflow-y-auto">
-            <div class="mb-2" flat v-for="item in searchResults" :key="item.name" @click="SET_searchSelect(item.id); focus = false">
+            <div class="mb-2" flat v-for="(item, i) in searchResults" :key="i" 
+            @click="SET_value({list: [item.id], id: 'searchSelect'}); focus = false">            
               {{ item }} 
             </div>
           </v-card>
@@ -102,7 +103,7 @@ export default {
   },
   methods: {
     ...mapMutations("coretext", ["SET_indexMantras"]),
-    ...mapMutations("parameters", ["SET_searchSelect"]),
+    ...mapMutations("parameters", ["SET_value"]),
     createSearch() {
       //make a local copy
       let temp = [];

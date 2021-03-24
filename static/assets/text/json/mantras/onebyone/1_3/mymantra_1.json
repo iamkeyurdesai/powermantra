@@ -1,28 +1,38 @@
-{
-    "id": 1,
-    "linkto": null,
-    "name": "",
-    "category": "",
-    "quality": "",
+{   
+    "id": 1, 
+    "name": "Gayatri Mantra",
+    "source": "Rig Veda (Mandala 3.62.10)",
+    "category": "Vedic mantra",
+    "quality": "rediance",
+    "deity": "Savitr also known as Gayatri",
+    "meter": "Gayatri",    
     "seer": "",
-    "deity": "",
-    "meter": "",
     "shakti": "",
     "pin": "",
-    "application": "",
-    "significance": "",
-    "video": "",
-    "audio": "",
-    "webinfo": "",
-    "article": "",
-    "references": "",
-    "mantra": [],
-    "prelude": [],
-    "annotation": [],
-    "wordenglish": [],
-    "wordhindi": [],
-    "mantraenglish": [],
-    "mantrahindi": [],
-    "preludeenglish": [],
-    "preludehindi": []
+    "application": "self-realization",
+    "benefits": "illumination, wisdom, self-knowledge",
+    "Significance": "This highly revered mantra invokes the Sun God (Savitr) through our inner light to bless us with illumination and self-knowledge. The Gayatri mantra together with the Mahamrityunjaya mantra are considered the most special and thought to embed all of the mantra shakti. This mantra is a must before any knowledge seeking endeavor. Traditionally, this mantra was given by the teacher to the pupil as part of the threading ceremony right before starting the formal education, like a right of passage.",
+    "How to chant": "This mantra can be chanted anywhere and anytime, but it will incur the highest benefit when chanted during the early morning period (bramha muhurta). For the beginners, the correct vedic pronunciation with svaras can provide a noticeably deeper inner experience. Meditators should chant it at the beginning of their meditation session. A very common practice is to chant the gayatri mantra 108 times in a single session (one mala of Gayatri). This mantra is often used for Purashcharan (the practice of chanting the mantra 100008 times under the guidance of a spiritual guide).",
+    "youtube": "https://www.youtube.com/watch?v=C6z2XV8G-oc", 
+    "mantra": [        
+        "OM, bhUrbhuvaH, svaH; tatsaviturvareNyaM; bhargo, devasya, dhImahi; dhiyo, yo, naH, prachodayAt.h"
+    ],    
+    "wordenglish": [
+        "OM=om, bhUH=earthly plane / bhuvaH=galactice plane, svaH=celestial plane; tat=that / savitur=the Sun / vareNyaM=worshipable; bhargH=rediance, devasya=God's, dhImahi=I meditate; dhiyo=intellect, yaH=that, naH=our, prachodayAt.h=awaken"        
+    ],    
+    "mantraenglish": [
+        "Om!<br> Vibration of consciousness through all three lokas! <br> I meditate on your divine rediance O Sun God! You indeed are worthy of our worship and please awaken our intellect with the knowledge of the Self!"
+    ],
+    "prelude": "DO NOT CHANGE",
+    "preludeenglish": "DO NOT CHANGE",
+    "annotation": "DO NOT CHANGE",
+    "wordhindi": "DO NOT CHANGE",
+    "mantrahindi": "DO NOT CHANGE",
+    "preludehindi": "DO NOT CHANGE",
+    "commentary": "DO NOT CHANGE",
+    "references": "DO NOT CHANGE",
+    "weblinks": "DO NOT CHANGE",
+    "popularity": 1,
+    "functionality": 1,
+    "linkto": null    
 }

@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container v-if="mantra">
     <v-row>
       <v-col>
         <v-card>
@@ -26,11 +26,11 @@
                 <template v-slot:default="{ open }">
                   <v-row no-gutters>
                     <v-col cols="6" v-if="!open" class="info--text pl-0">
-                      Learn about {{myMantra.name}}</v-col
+                      Learn about {{mantra.name}}</v-col
                     >
                     <v-col cols="6" class="info--text">
                       <v-fade-transition leave-absolute>
-                        <span v-if="open"> {{myMantra.name}} </span>
+                        <span v-if="open"> {{mantra.name}} Background </span>
                       </v-fade-transition>
                     </v-col>
                   </v-row>
@@ -39,11 +39,12 @@
               <v-expansion-panel-content>
                 <div>
                   <v-card-text>
-                    This is a <strong>{{myMantra.category}}</strong> mantra. The diety of this
-                    mantra is <strong>{{myMantra.deity}}</strong>.
-                    This mantra embodies the quality of <strong>{{myMantra.quality}}</strong>.
+                    This is a <strong>{{mantra.category}}</strong>. 
+                    The diety of this
+                    mantra is <strong>{{mantra.deity}}</strong>.
+                    This mantra embodies the quality of <strong>{{mantra.quality}}</strong>.
                     Chanting this mantra will grant the benefits of
-                    <strong>{{myMantra.benefits}}</strong>.
+                    <strong>{{mantra.benefits}}</strong>. The key application of this mantra is toward <strong>{{mantra.application}}</strong>.
                   </v-card-text>
                   <v-tabs v-model="tab" right>
                     <v-tab
@@ -58,7 +59,7 @@
                   <v-tabs-items v-model="tab">
                     <v-tab-item v-for="item in items" :key="item">
                       <v-card color="basil" flat>
-                        <v-card-text>{{ myMantra[item] }}</v-card-text>
+                        <v-card-text>{{ mantra[item] }}</v-card-text>
                       </v-card>
                     </v-tab-item>
                   </v-tabs-items>
@@ -80,18 +81,18 @@
             ></av-bars>
           </div>
           <div align="center" class="my-2" v-if="showYoutube">
-            <div align="left" class="pa-2 info--text body-2">
-            Check out this youtube video
-            <v-btn color="success" text small @click="showYoutube=false"><v-icon small>mdi-close</v-icon></v-btn>
-            </div> 
+            <v-row justify="space-between" class="ma-0 px-4 mb-3">
+             <span class="info--text"> Check out this youtube video</span>             
+            <v-btn color="warning" text small @click="showYoutube=false"><v-icon>mdi-close</v-icon></v-btn>
+            </v-row> 
             <youtube
-              :video-id="myMantra.youtube.split('=')[1]"
+              :video-id="mantra.youtube.split('=')[1]"
               ref="youtube"
               fitParent              
             ></youtube>
           </div>
           <div>
-          <renderMantra></renderMantra>          
+          <!-- <renderMantra :mantra="mantra" :script="script"></renderMantra>           -->
           </div>
         </v-card>
       </v-col>
@@ -101,30 +102,37 @@
 
 
 <script>
-import { mapState } from "vuex";
+// import { mapState } from "vuex";
 // import addToPlaylist from "./subcomponents/add-to-playlist";
-import renderMantra from "./subcomponents/render-mantra";
+// import renderMantra from "./subcomponents/render-mantra";
 export default {
+  props: {
+    mantra: Object,
+    script: String
+  },
   data() {
     return {      
-      tab: null,
-      items: ["significance", "benefits", "howto"],
-      text:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      tab: null,      
+      items: ["Significance", "How to chant"],      
       showAudio: false,
       showYoutube: false,
       audioPlaying: null,
     };
   },
   components: {
-    renderMantra
+    // renderMantra
   },
   computed: {
-    ...mapState('parameters', ['searchSelect']),
-    ...mapState('coretext', ['mantras']),
-    myMantra() {
-      return this.mantras[this.searchSelect]
-    }
+    // ...mapState('parameters', ['searchSelect', 'script']),
+    // ...mapState('coretext', ['mantras']),
+    // myMantra() {
+    //   if(this.mantras.length > 0) {
+    //     return this.mantras[this.searchSelect]
+    //   } else {
+    //     return false
+    //   }
+      
+    // }
   }
 };
 </script>

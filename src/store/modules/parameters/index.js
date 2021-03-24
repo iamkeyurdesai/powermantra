@@ -15,7 +15,8 @@ const state = {
   fsize: 'medium',
   fabShow: true,
   isDeveloper: false,
-  searchSelect: null,
+  searchSelect: [3,4,5],
+  chantingON: false,
 };
 
 export default {
