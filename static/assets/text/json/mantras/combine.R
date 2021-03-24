@@ -36,6 +36,8 @@ mergeFiles <- function(begin, end) {
     print(paste("blank rows removed: ", nrow(myoutput1) - nrow(myfinal)))
     writeLines(myfinal$myoutput, paste0(".", mymergedfile))
     print(sprintf("success: created %s", paste0(".", mymergedfile)))
+    finalDestination <- "../../../../../public/assets/text/json/mantras/"
+    file.copy(paste0(".", mymergedfile), paste0(finalDestination, mymergedfile), overwrite = TRUE)
   }
   
   ans <- tibble(myMergedFile = mymergedfile, myTimeStamp = timestamp()) 
@@ -59,3 +61,5 @@ myCurrentEntries %>%
 writeLines(prettify(toJSON(myOutput)), "./myFilesToLoad.json")
 print("success: updated ./myFilesToLoad.json")
 }
+
+file.copy("./myFilesToLoad.json", "../../../../../public/assets/text/json/mantras/myFilesToLoad.json", overwrite = TRUE)

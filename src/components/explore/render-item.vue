@@ -26,11 +26,11 @@
                 <template v-slot:default="{ open }">
                   <v-row no-gutters>
                     <v-col cols="6" v-if="!open" class="info--text pl-0">
-                      Learn about Om</v-col
+                      Learn about {{myMantra.name}}</v-col
                     >
                     <v-col cols="6" class="info--text">
                       <v-fade-transition leave-absolute>
-                        <span v-if="open"> Om </span>
+                        <span v-if="open"> {{myMantra.name}} </span>
                       </v-fade-transition>
                     </v-col>
                   </v-row>
@@ -90,8 +90,8 @@
               fitParent              
             ></youtube>
           </div>
-          <div v-if="myMantra.id">
-          <renderMantra :whichMantra="myMantra.id"></renderMantra>          
+          <div>
+          <renderMantra></renderMantra>          
           </div>
         </v-card>
       </v-col>
