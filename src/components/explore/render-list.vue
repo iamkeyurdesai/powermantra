@@ -4,10 +4,9 @@
       v-for="(item, i) in searchSelect"
       :key="i"
       :mantra="mantras[searchSelect[i]]"
-      :script="script"
+      :script="script"      
     >
     </renderItem>
-    {{searchSelect}}
   </div>
 </template>
 

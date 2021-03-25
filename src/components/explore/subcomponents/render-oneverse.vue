@@ -1,6 +1,6 @@
 <template>
   <div>
-    <span class="info--text ma-0 pa-4"> {{ myMantraByProperty('name') }} in Sanskrit</span>
+    <span class="info--text ma-0 pa-4"> {{ mantra.name }} in Sanskrit</span>
     <div class="d-flex justify-center mb-3">
       <div align="left">
         <span v-for="(item, i) in myMantra" :key="item + i">
@@ -51,7 +51,7 @@
       </v-btn>
     </div>
     <v-row justify="space-between" class="ma-0 px-4">
-    <span class="info--text"> {{ myMantraByProperty('name') }} in English</span>
+    <span class="info--text"> {{ mantra.name }} in English</span>
       <v-btn text x-small rounded class="text--secondary">
         <v-icon                  
           class="mx-1"
@@ -69,7 +69,7 @@
       </v-btn>
     </v-row>
     <div v-if="transOn">
-      <v-card-text class="ma-0" v-html="myMantraByProperty('mantraenglish')[0]">
+      <v-card-text class="ma-0" v-html="mantra.mantraenglish[whichVerse]">
       </v-card-text>
     </div>
   </div>
@@ -95,14 +95,13 @@ export default {
     ...mapState("coretext", ["mantras"]),
     ...mapState("parameters", ["searchSelect"]),
     myMantra() {
-      return this.mantras[this.whichMantra - 1].mantra[this.whichVerse].split(
+      
+      return this.mantra.mantra[this.whichVerse].split(
         ";"
       );
     },
     myWords() {
-      return this.mantras[this.whichMantra - 1].wordenglish[
-        this.whichVerse
-      ].split(";");
+      return this.mantra.wordenglish[this.whichVerse].split(";");
     },    
   },
   methods: {
@@ -123,10 +122,7 @@ export default {
     convert1(val) {
       let a = val.split("=");
       return this.convert(a[0], "primary") + " = " + a[1];
-    },
-    myMantraByProperty(val) {
-      return this.mantras[this.whichMantra - 1][val];
-    },
+    }
   },
 };
 </script>

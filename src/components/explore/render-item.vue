@@ -1,4 +1,11 @@
 <template>
+<v-sheet min-height="250" class="fill-height" color="transparent">
+<v-lazy
+        v-model="isActiveItem"
+        :options="{
+          threshold: .5
+        }"                
+      >
   <v-container v-if="mantra">
     <v-row>
       <v-col>
@@ -39,12 +46,12 @@
               <v-expansion-panel-content>
                 <div>
                   <v-card-text>
-                    This is a <strong>{{mantra.category}}</strong>. 
+                    This is a <strong>{{mantra.Category}}</strong>. 
                     The diety of this
-                    mantra is <strong>{{mantra.deity}}</strong>.
-                    This mantra embodies the quality of <strong>{{mantra.quality}}</strong>.
+                    mantra is <strong>{{mantra.Deity}}</strong>.
+                    This mantra embodies the quality of <strong>{{mantra.Quality}}</strong>.
                     Chanting this mantra will grant the benefits of
-                    <strong>{{mantra.benefits}}</strong>. The key application of this mantra is toward <strong>{{mantra.application}}</strong>.
+                    <strong>{{mantra.Benefits}}</strong>. The key application of this mantra is toward <strong>{{mantra.Application}}</strong>.
                   </v-card-text>
                   <v-tabs v-model="tab" right>
                     <v-tab
@@ -86,25 +93,27 @@
             <v-btn color="warning" text small @click="showYoutube=false"><v-icon>mdi-close</v-icon></v-btn>
             </v-row> 
             <youtube
-              :video-id="mantra.youtube.split('=')[1]"
+              :video-id="mantra.Youtube.split('=')[1]"
               ref="youtube"
               fitParent              
             ></youtube>
           </div>
           <div>
-          <!-- <renderMantra :mantra="mantra" :script="script"></renderMantra>           -->
+          <renderMantra :mantra="mantra" :script="script"></renderMantra>          
           </div>
         </v-card>
       </v-col>
     </v-row>
   </v-container>
+</v-lazy>
+</v-sheet>
 </template>
 
 
 <script>
 // import { mapState } from "vuex";
 // import addToPlaylist from "./subcomponents/add-to-playlist";
-// import renderMantra from "./subcomponents/render-mantra";
+import renderMantra from "./subcomponents/render-mantra";
 export default {
   props: {
     mantra: Object,
@@ -117,10 +126,11 @@ export default {
       showAudio: false,
       showYoutube: false,
       audioPlaying: null,
+      isActiveItem: false
     };
   },
   components: {
-    // renderMantra
+    renderMantra
   },
   computed: {
     // ...mapState('parameters', ['searchSelect', 'script']),

@@ -12,7 +12,7 @@
           clearable
           label="Search Power Mantra"
           type="text"
-          @input="focus = true"          
+          @input="focus = true"
           @click:clear="myQuery = ''"
           :rounded="!focus"
           :shaped="focus"
@@ -20,12 +20,20 @@
         </v-text-field>
         <v-card v-if="focus" class="ma-0">
           <v-card max-height="35vh" class="overflow-y-auto">
-            <div class="mb-2" flat v-for="(item, i) in searchResults" :key="i" 
-            @click="SET_value({list: [item.id], id: 'searchSelect'}); focus = false">            
-              {{ item }} 
+            <div
+              class="mb-2"
+              flat
+              v-for="(item, i) in searchResults"
+              :key="i"
+              @click="
+                SET_value({ list: [item.id], id: 'searchSelect' });
+                focus = false;
+              "
+            >
+              {{ item }}
             </div>
           </v-card>
-        </v-card>        
+        </v-card>
       </v-col>
     </v-row>
     <v-row>
@@ -33,11 +41,12 @@
         <div class="caption">Browse by</div>
         <v-btn
           text
-          v-for="item in filterByOptions"
-          :key="item"
+          v-for="(item,i) in filterByOptions"
+          :key="i"
           class="text-none text--secondary caption"
           raised
           x-small
+          @click="findUnique(item)"
         >
           {{ item }}</v-btn
         >
@@ -48,11 +57,12 @@
         <div>
           <v-chip
             outlined
-            v-for="item in nextFilterOptions"
-            :key="item"
+            v-for="(item,i) in nextFilterOptions"
+            :key="i"
             :input-value="nextFilter == item"
             filter
             class="mr-2"
+            @click="setSearchSelect(item)"
           >
             {{ item }}
           </v-chip>
@@ -70,30 +80,29 @@ export default {
   data() {
     return {
       filterByOptions: [
-        "Diety",
+        "Deity",
         "Quality",
         "Category",
-        "Benefits",
         //"Popularity",
       ],
       filterSelected: null,
-      nextFilterOptions: ["a", "b", "c", "d", "e", "f", "g", "h", "i"],
+      nextFilterOptions: [],
       nextFilter: null,
       password: "Password",
       show: false,
       myQuery: "",
       marker: true,
-      focus: false,      
+      focus: false,
       index: null,
       searchResults: [],
     };
   },
   computed: {
-    ...mapState("coretext", ["mantras", "indexMantras"]),
+    ...mapState("coretext", ["mantras", "indexMantras"]),    
   },
   watch: {
     myQuery(val) {
-      console.log(val);      
+      console.log(val);
       if (this.indexMantras === null) {
         this.createSearch();
         console.log("I created index");
@@ -120,7 +129,7 @@ export default {
       // setup the index
       let temp1;
       temp1 = new FlexSearch({
-        tokenize: "strict",
+        tokenize: "reverse",
         depth: 3,
         doc: {
           id: "id",
@@ -147,8 +156,18 @@ export default {
         // resolution: 12,
         tokenize: "strict",
         // encode: "false",
-      });            
+      });
     },
+    findUnique(property){
+      this.filterSelected = property
+      this.nextFilterOptions = [...new Set(this.mantras.map(a => a[property]))]
+    },
+    setSearchSelect(item){
+      this.nextFilter = item
+      let myIndices = this.mantras.filter(a => a[this.filterSelected]===item).map(b => (b.id - 1));
+      this.SET_value({ list: myIndices, id: 'searchSelect' });
+      console.log(myIndices)      
+    }
   },
 };
 </script>

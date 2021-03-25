@@ -8,7 +8,6 @@
 
 <script>
 import renderOneVerse from './render-oneverse'
-// import { mapState } from "vuex";
 export default {
   props: {    
     script: String,
@@ -22,10 +21,7 @@ export default {
   components: {
     renderOneVerse
   },
-  computed: {    
-    // myMantra() {
-    //   return this.mantras[this.searchSelect]
-    // }
+  computed: {        
   }
 }
 </script>
