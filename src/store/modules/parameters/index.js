@@ -15,7 +15,9 @@ const state = {
   fsize: 'medium',
   fabShow: true,
   isDeveloper: false,
-  searchSelect: [3,4,5],
+  searchSelect: [{mantra_id:3, verse_id:0},
+    {mantra_id:4, verse_id:0},
+    {mantra_id:5, verse_id:0}],
   chantingON: false,
 };
 

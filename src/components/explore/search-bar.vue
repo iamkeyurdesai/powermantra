@@ -21,16 +21,16 @@
         <v-card v-if="focus" class="ma-0">
           <v-card max-height="35vh" class="overflow-y-auto">
             <div
-              class="mb-2"
+              class="pa-2"
               flat
               v-for="(item, i) in searchResults"
               :key="i"
-              @click="
-                SET_value({ list: [item.id], id: 'searchSelect' });
-                focus = false;
-              "
+              @click="goToSelectedItem(item)"
             >
-              {{ item }}
+              <span :class="myNameStyle(i)"> {{ item.name }} </span> |
+              <span :class="myVerseTextStyle(i)"> {{ item.mantra }} || 
+              <span v-if="item.verse_id>0">  (v-{{item.verse_id}})</span></span>
+              <v-divider></v-divider>
             </div>
           </v-card>
         </v-card>
@@ -41,7 +41,7 @@
         <div class="caption">Browse by</div>
         <v-btn
           text
-          v-for="(item,i) in filterByOptions"
+          v-for="(item, i) in filterByOptions"
           :key="i"
           class="text-none text--secondary caption"
           raised
@@ -57,7 +57,7 @@
         <div>
           <v-chip
             outlined
-            v-for="(item,i) in nextFilterOptions"
+            v-for="(item, i) in nextFilterOptions"
             :key="i"
             :input-value="nextFilter == item"
             filter
@@ -98,11 +98,12 @@ export default {
     };
   },
   computed: {
-    ...mapState("coretext", ["mantras", "indexMantras"]),    
+    ...mapState("coretext", ["mantras", "indexMantras", "copyMantras"]),
   },
   watch: {
     myQuery(val) {
       console.log(val);
+      console.log(this.indexMantras)
       if (this.indexMantras === null) {
         this.createSearch();
         console.log("I created index");
@@ -113,67 +114,144 @@ export default {
   methods: {
     ...mapMutations("coretext", ["SET_indexMantras"]),
     ...mapMutations("parameters", ["SET_value"]),
+    myNameStyle(i){
+      if(i < 2) 
+      { 
+        return "body-2 success--text" }
+         else if (i < 5) {
+           return "body-2 warning--text"
+           } else {
+             return "caption error--text"
+    }
+    },
+    myVerseTextStyle(i){
+      if(i < 2) {
+        return "caption text--primary"
+        }else if(i <5) {
+          return "caption text--secondary" } else 
+          {
+      return "caption text--disabled" }
+    },
+    goToSelectedItem(item) {
+      this.SET_value({
+        list: [{ mantra_id: item.id, verse_id: item.verse_id }],
+        id: "searchSelect",
+      });
+      this.focus = false;
+      setTimeout(() => {
+        let temp = '#ID_mantra' + item.id + 'verse' + item.verse_id
+        this.$vuetify.goTo(temp, {
+          duration: 300,
+          offset: -300,
+          easing: "easeInOutCubic",
+        });
+      }, 100);
+    },
     createSearch() {
+      //I messed up in naming the id instead of mantra_id in temp.push below
+      //doesn't make a difference but not a good practice
+      //same with naming the verse mantra
+      //again a bad and potentially confusing practice
+
       //make a local copy
       let temp = [];
       // add id to every entry
       let ix = 0;
-      for (var j = 0; j < 6; j++) {
-        temp.push({
-          id: ix,
-          name: this.makeCopy(this.mantras[j].name),
-        });
-        ix = ix + 1;
+      for (var j = 0; j < this.mantras.length; j++) {
+        let myCopy = [...this.mantras[j].mantra];
+        // console.log(myCopy)
+        for (var k = 0; k < myCopy.length; k++) {
+          temp.push({
+            id: j,
+            verse_id: k,
+            ix_id: ix,
+            name: this.mantras[j].name.slice(),
+            mantra: myCopy[k],
+          });
+          ix = ix + 1;
+        }
       }
 
       // setup the index
       let temp1;
       temp1 = new FlexSearch({
-        tokenize: "reverse",
-        depth: 3,
+        tokenize: 'reverse',
+         encode: 'icase',
+    threshold: 1,
+    resolution: 3,
         doc: {
           id: "id",
-          field: "name",
+          field:  ["name" ,"mantra"],
         },
       });
-      console.log(temp);
+      // console.log(temp);
       //create the actual index
       temp1.add(temp);
       //console.log(temp1.info)
       this.SET_indexMantras(temp1);
-    },
-    makeCopy(val) {
-      let a = val;
-      return a;
+      // console.log(temp);
     },
     searchQuery(val) {
-      this.searchResults = this.indexMantras.search({
+      let searchResultsAll = this.indexMantras.search({
         // query:this.convertItrans(word),
         query: val,
         // limit: 5,
-        depth: 3,
         // threshold: 10,
         // resolution: 12,
-        tokenize: "strict",
+      //  tokenize: "strict",
+      //   depth: 3, 
+      //   resolution: 9,
         // encode: "false",
       });
+      // console.log('search results')
+      // console.log(searchResultsAll);
+      this.searchResults = [];
+      let searchResultsTemp = [];
+      for (var i = 0; i < searchResultsAll.length; i++) {
+        // console.log(i)
+        if (i === 0) {
+          searchResultsTemp.push({
+            mantra_id: searchResultsAll[i].id,
+            verse_id: searchResultsAll[i].verse_id,
+          });
+          this.searchResults.push(searchResultsAll[i]);
+        } else {
+          // console.log('in else')
+          
+          if (searchResultsAll[i - 1].id != searchResultsAll[i].id) {
+            // console.log('I am here')
+            searchResultsTemp.push({
+              mantra_id: searchResultsAll[i].id,
+              verse_id: searchResultsAll[i].id,
+            });
+            this.searchResults.push(searchResultsAll[i]);
+          }
+        }
+      }
+      // console.log('search results tmep')
+      // console.log(searchResultsTemp)
+      if(searchResultsTemp.length > 0){
+      this.SET_value({ list: searchResultsTemp, id: "searchSelect" });
+      }
     },
-    findUnique(property){
-      this.filterSelected = property
-      this.nextFilterOptions = [...new Set(this.mantras.map(a => a[property]))]
+    findUnique(property) {
+      this.filterSelected = property;
+      this.nextFilterOptions = [
+        ...new Set(this.mantras.map((a) => a[property])),
+      ];
     },
-    setSearchSelect(item){
-      this.nextFilter = item
-      let myIndices = this.mantras.filter(a => a[this.filterSelected]===item).map(b => (b.id - 1));
-      this.SET_value({ list: myIndices, id: 'searchSelect' });
-      console.log(myIndices)      
-    }
+    setSearchSelect(item) {
+      this.nextFilter = item;
+      let myIndices = this.mantras
+        .filter((a) => a[this.filterSelected] === item)
+        .map((b) => {
+          return { mantra_id: b.id - 1, verse_id: 0 };
+        });
+      this.SET_value({ list: myIndices, id: "searchSelect" });
+      // console.log(myIndices);
+    },
   },
 };
 </script>
  <style lang="scss" scoped>
 </style>
-
-
-var FlexSearch = require("flexsearch")
-

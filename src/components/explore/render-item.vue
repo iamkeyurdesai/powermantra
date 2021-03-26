@@ -32,14 +32,14 @@
               <v-expansion-panel-header>
                 <template v-slot:default="{ open }">
                   <v-row no-gutters>
-                    <v-col cols="6" v-if="!open" class="info--text pl-0">
-                      Learn about {{mantra.name}}</v-col
-                    >
-                    <v-col cols="6" class="info--text">
+                    <v-col cols="10" v-if="!open" class="info--text">
+                      Learn about {{mantra.name}}                      
+                      </v-col>
+                    <v-col cols="10" class="info--text">
                       <v-fade-transition leave-absolute>
-                        <span v-if="open"> {{mantra.name}} Background </span>
-                      </v-fade-transition>
-                    </v-col>
+                        <span v-if="open"> Background on {{mantra.name}} </span>
+                      </v-fade-transition>                      
+                    </v-col>                    
                   </v-row>
                 </template>
               </v-expansion-panel-header>
@@ -99,7 +99,7 @@
             ></youtube>
           </div>
           <div>
-          <renderMantra :mantra="mantra" :script="script"></renderMantra>          
+          <renderMantra :mantra="mantra" :script="script" :mantra_id="mantra_id"></renderMantra>          
           </div>
         </v-card>
       </v-col>
@@ -117,7 +117,8 @@ import renderMantra from "./subcomponents/render-mantra";
 export default {
   props: {
     mantra: Object,
-    script: String
+    script: String,
+    mantra_id: Number
   },
   data() {
     return {      
@@ -147,4 +148,4 @@ export default {
 };
 </script>
  <style lang="scss" scoped>
-</style>
+ </style>

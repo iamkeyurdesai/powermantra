@@ -3,7 +3,8 @@
     <renderItem
       v-for="(item, i) in searchSelect"
       :key="i"
-      :mantra="mantras[searchSelect[i]]"
+      :mantra="mantras[searchSelect[i].mantra_id]"
+      :mantra_id="searchSelect[i].mantra_id"
       :script="script"      
     >
     </renderItem>
