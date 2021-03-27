@@ -38,7 +38,7 @@
 import * as tf from '@tensorflow/tfjs';
 import * as speechCommands from '@tensorflow-models/speech-commands'
 import { mapState } from "vuex";
-
+import {auth} from "@/main.js"
 export default {
   data() {
     return {
@@ -58,8 +58,12 @@ export default {
   methods: {
     queryDB() {    
     this.$store.dispatch('firestore/bindUserdata', 
-    {path: 'users/profiles/signin', 
-    query: [this.message1, this.message2, this.message3]})
+    {
+      // path: 'users/profiles/signin', 
+      //path: '/userdata/L1KNKyu8vWhCD15e4mbv1ZtlKmw1/playlists',
+      path: '/userdata/'+auth.currentUser.uid+'/playlists',
+    query: [this.message1, this.message2, this.message3],
+    whereTo: 'userdata'})
   },
     addItem() {
       this.xValues.push(0);

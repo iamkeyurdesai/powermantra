@@ -28,11 +28,12 @@ export default {
             signInSuccessWithAuthResult: function(authResult) {
             if(authResult.additionalUserInfo.isNewUser) {
             var user = authResult.user
-            db.collection('users').doc('profiles').collection('signin').doc(authResult.user.uid).set({
+            db.collection('signup').doc(authResult.user.uid).set({
               name: user.displayName,
               email: user.email,
               photoUrl: user.photoURL,
-              emailVerified: user.emailVerified
+              emailVerified: user.emailVerified,
+              timestamp: firebase.firestore.FieldValue.serverTimestamp()
             })
           }          
               return true;

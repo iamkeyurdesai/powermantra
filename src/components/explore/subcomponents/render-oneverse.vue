@@ -1,12 +1,12 @@
 <template>
   <div>
-    <v-row justify="space-between" class="ma-0 pa-4">
-    <span class="info--text"> Sanskrit</span>
-    <div v-if="whichVerse==0">
-      <savePlaylist></savePlaylist>
+    <v-row justify="space-between" class="ma-3" v-if="whichVerse==0">      
+    <div class="info--text"> Sanskrit with translation</div>
+    <div>
+      <savePlaylist :whichMantra="mantra.id"></savePlaylist>
     </div>
     </v-row>
-    <div class="d-flex justify-center mb-3">
+    <div class="d-flex justify-center">
       <div align="left">
         <span v-for="(item, i) in myMantra" :key="item + i">
           <span
@@ -39,40 +39,29 @@
           /></span>
         </span>
       </div>
-      <div class="info--text" v-if="mantra.mantra.length > 1">
+      <div class="font-weight-light caption" v-if="mantra.mantra.length > 1">
         (v-{{whichVerse+1}})
         </div>
         <div >
-          <v-btn text x-small rounded class="text--secondary">
-            <v-icon small @click="secondScriptOn = false" v-if="secondScriptOn"
-              >mdi-close</v-icon
+          <v-btn x-small text class="font-weight-bold">
+            <v-icon small @click="secondScriptOn = false" v-if="secondScriptOn" color="success"
+              >mdi-format-title</v-icon
             >
             <v-icon
-              small
-              class="mx-1"
+              small              
               @click="secondScriptOn = true"
-              v-if="!secondScriptOn"
+              v-if="!secondScriptOn" color="error"
             >
-              mdi-plus</v-icon
+              mdi-format-clear</v-icon
             >
           </v-btn>
         </div>      
     </div>
-    <v-row justify="space-between" class="ma-0 px-4">
-      <span class="info--text"> Translation </span>
-      <v-btn text x-small rounded class="text--secondary">
-        <v-icon class="mx-1" @click="transOn = false" v-if="transOn"
-          >mdi-chevron-down</v-icon
-        >
-        <v-icon class="mx-1" @click="transOn = true" v-if="!transOn">
-          mdi-chevron-up</v-icon
-        >
-      </v-btn>
-    </v-row>
-    <div v-if="transOn">
-      <v-card-text class="ma-0" v-html="mantra.mantraenglish[whichVerse]">
+    <div>
+      <v-card-text  v-html="mantra.mantraenglish[whichVerse]">              
       </v-card-text>
     </div>
+    <v-divider inset class="mb-4"></v-divider>
   </div>
 </template>
 
@@ -93,7 +82,7 @@ export default {
   data() {
     return {
       secondScriptOn: true,
-      transOn: true,
+      // transOn: true,
     };
   },
   computed: {
