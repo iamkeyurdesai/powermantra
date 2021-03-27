@@ -3,9 +3,21 @@
     <v-row justify="space-between" class="ma-3" v-if="whichVerse==0">      
     <div class="info--text"> Sanskrit with translation</div>
     <div>
-      <savePlaylist :whichMantra="mantra.id"></savePlaylist>
+      <savePlaylist :whichMantra="mantra.id" v-on:saveSuccess="saveSuccessMsgAlert"></savePlaylist>
     </div>
     </v-row>
+    <v-alert
+      v-model="saveSuccessMsg"
+      border="left"
+      close-text="Close Alert"
+      color="success"
+      dark
+      dismissible
+      class="body-2"
+      dense
+    >
+      <strong> {{mantra.name}} </strong> was added to <strong> {{saveSuccessInfo}} </strong>. Go to <strong> Library </strong> for your playlists. 
+    </v-alert>
     <div class="d-flex justify-center">
       <div align="left">
         <span v-for="(item, i) in myMantra" :key="item + i">
@@ -82,6 +94,8 @@ export default {
   data() {
     return {
       secondScriptOn: true,
+      saveSuccessMsg: false,
+      saveSuccessInfo: "",
       // transOn: true,
     };
   },
@@ -96,6 +110,10 @@ export default {
     },
   },
   methods: {
+    saveSuccessMsgAlert(value){
+    this.saveSuccessMsg=true
+    this.saveSuccessInfo=value
+    },
     convert(myinput, option) {
       if (option === "primary") {
         return Sanscript.t(myinput, "itrans", this.script);

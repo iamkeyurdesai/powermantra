@@ -2,7 +2,7 @@
   <v-row justify="center">
     <v-dialog v-model="dialog" scrollable max-width="300px">
       <template v-slot:activator="{ on, attrs }">
-        <v-btn v-bind="attrs" v-on="on" text @click="bindToFirestore()">
+        <v-btn v-bind="attrs" v-on="on" text @click="bindToFirestore('ownedPlaylists')">
           <v-icon>mdi-plus-box-multiple</v-icon>
         </v-btn>
       </template>
@@ -169,7 +169,8 @@ export default {
           mantras: newArray,
           timestamp: firebase.firestore.FieldValue.serverTimestamp(),
         });
-        this.dialog = false        
+        this.dialog = false
+        this.$emit("saveSuccess",this.ownedPlaylists[this.dialogm1].name)        
       }
     },
     addNewPlaylist() {
@@ -187,12 +188,13 @@ export default {
         });
       this.nameBox = false;
     },
-    bindToFirestore() {
-      if (this.ownedPlaylists.length == 0) {
+    bindToFirestore(value) {      
+        if (this[value].length == 0) {
         this.$store.dispatch("firestore/bindUserdata", {
           path: "/userdata/" + auth.currentUser.uid + "/playlists",
+          includQuery: false,
           // query: [this.message1, this.message2, this.message3],
-          whereTo: "ownedPlaylists",
+          whereTo: value,
         });
       } else {
         console.log("ownedPlaylists already loaded");
