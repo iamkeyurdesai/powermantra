@@ -1,103 +1,98 @@
 <template>
   <div>
-
     <v-container>
       <v-row dense>
-
-<v-col
-          v-for="(list, i) in ownedPlaylists" :key="i"
-          cols="12"
-        >
-          <v-card
-            :color="item.color"
-            dark
-          >
+        <v-col v-for="(item, i) in ownedPlaylists" :key="i" cols="12">
+          <v-card dense>
             <div class="d-flex flex-no-wrap justify-space-between">
               <div>
                 <v-card-title
-                  class="headline"
-                  v-text="item.title"
+                  class="subtitle-2"
+                  v-text="item.name"
                 ></v-card-title>
 
-                <v-card-subtitle v-text="item.artist"></v-card-subtitle>
+                <!-- <v-card-subtitle v-text="item.artist"></v-card-subtitle> -->
+                <v-card-subtitle class="body-2">Lotsandlots</v-card-subtitle>
 
-                <v-card-actions>
-                  <v-btn
-                    v-if="item.artist === 'Ellie Goulding'"
-                    class="ml-2 mt-3"
-                    fab
-                    icon
-                    height="40px"
-                    right
-                    width="40px"
-                  >
-                    <v-icon>mdi-play</v-icon>
-                  </v-btn>
-
-                  <v-btn
-                    v-else
-                    class="ml-2 mt-5"
-                    outlined
-                    rounded
-                    small
-                  >
-                    START RADIO
-                  </v-btn>
+                <v-card-actions class="ma-0">
+                  <v-btn left x-small @click="loadSelectedPlaylist(item)"> open </v-btn>
+                  <v-btn left x-small> share </v-btn>
                 </v-card-actions>
               </div>
-
-              <v-avatar
-                class="ma-3"
-                size="125"
-                tile
-              >
-                <v-img :src="item.src"></v-img>
-              </v-avatar>
+              <v-divider inset vertical></v-divider>
+              <div>
+                <v-row dense>
+                  <v-card-text class="pa-2 caption">
+                    {{ item.description }}
+                  </v-card-text>
+                </v-row>
+                <v-row dense>
+                  <v-card-text class="pa-2 caption">
+                    {{ item.timestamp.seconds }} | {{ item.mantras.length }} |
+                    {{ item.timestamp.nanoseconds }}
+                  </v-card-text>
+                </v-row>
+              </div>
             </div>
           </v-card>
         </v-col>
-
-           </v-row>
+      </v-row>
     </v-container>
-    <v-card v-for="(list, i) in ownedPlaylists" :key="i">
-      {{list}}
-    </v-card>
   </div>
 </template>
 
 
 <script>
 import { auth } from "@/main.js";
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 export default {
-  data () {
-    return {
-      
-    }
+  data() {
+    return {};
   },
   computed: {
-      ...mapState("firestore", ["ownedPlaylists"]),
+    ...mapState("firestore", ["ownedPlaylists"]),
   },
   mounted() {
     setTimeout(() => {
-      this.bindToFirestore("ownedPlaylists")
-    }, 10000);
+      this.bindToFirestore("ownedPlaylists");
+    }, 5000);
   },
   methods: {
-        bindToFirestore(value) {      
-        if (this[value].length == 0) {
+    ...mapMutations("parameters", ["SET_value"]),
+    bindToFirestore(value) {
+      console.log(auth.currentUser.uid);
+      if (this[value].length == 0) {
         this.$store.dispatch("firestore/bindUserdata", {
           path: "/userdata/" + auth.currentUser.uid + "/playlists",
           includQuery: false,
           // query: [this.message1, this.message2, this.message3],
-          whereTo: value,
+          whereToBind: value,
         });
       } else {
         console.log("ownedPlaylists already loaded");
       }
-    }
-  }
-}
+    },
+    loadSelectedPlaylist(item) {
+      console.log(item); 
+      let playlistId = item.tag      
+      let myTempPath = "/" + "Library" + "/" + "api=1&" + "pl=" + playlistId;
+      if (this.path !== myTempPath) {
+        this.$router.push(myTempPath);
+        console.log(myTempPath);
+        if (myTempPath !== "/")
+          this.SET_value({ list: myTempPath, id: "path" });
+
+        // let myTempPath = '/' + this.mainItem + '/' + 'api=1' + '&activeTab=' + this.activeTab +
+        //    '&chapter=' + this.chapter + '&verse=' + this.verse + '&theme=' + this.theme + '&language=' + this.language +
+        //    '&script=' + this.script + '&fsize=' + this.fsize
+        //    if(this.path !== myTempPath) {
+        //    this.$router.push(myTempPath)
+        //    console.log(myTempPath)
+        //    if(myTempPath !== "/") this.SET_path(myTempPath)
+      }
+    },
+  },
+};
 </script>
  <style lang="scss" scoped>
 </style>

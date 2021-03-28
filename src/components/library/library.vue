@@ -1,7 +1,8 @@
 <template>
   <div>    
     <div v-if="!chantingON">     
-    <renderPlaylists> </renderPlaylists>
+    <renderPlaylists v-if="pl==null"> </renderPlaylists>
+    <loadPlaylist v-if="pl!=null"> </loadPlaylist>
     </div>
 
   <div v-if="chantingON"> 
@@ -20,6 +21,7 @@
 <script>
 import chantingTimer from "@/components/explore/chanting-timer";
 import renderPlaylists from "./render-playlists";
+import loadPlaylist from "./load-playlist";
 
 import { mapState, mapMutations } from "vuex";
 
@@ -29,11 +31,16 @@ export default {
   },
   components: {    
     renderPlaylists,
+    loadPlaylist,
     chantingTimer,
   },
-  mounted() {},
+  mounted() {
+    if(!this.$router.currentRoute.path.includes('pl=')) {
+      this.SET_value({ list: null, id: "pl" })
+    }
+  },
   computed: {
-    ...mapState("parameters", ["chantingON"]),
+    ...mapState("parameters", ["chantingON", "pl"]),
   },
   methods: {
     ...mapMutations("parameters", ["SET_value"]),

@@ -184,9 +184,16 @@ export default {
           name: this.playlistName.trim(),
           description: this.playlistDescription.trim(),
           mantras: [this.whichMantra],
+          owner: auth.currentUser.displayName,
+          tag: this.uniqueTag(),
           timestamp: firebase.firestore.FieldValue.serverTimestamp(),
         });
       this.nameBox = false;
+    },
+    uniqueTag(){
+      let d = new Date();
+      let n = d.getTime().toString(36)
+      return n + auth.currentUser.uid.slice(1,4)
     },
     bindToFirestore(value) {      
         if (this[value].length == 0) {
@@ -194,7 +201,7 @@ export default {
           path: "/userdata/" + auth.currentUser.uid + "/playlists",
           includQuery: false,
           // query: [this.message1, this.message2, this.message3],
-          whereTo: value,
+          whereToBind: value,
         });
       } else {
         console.log("ownedPlaylists already loaded");
