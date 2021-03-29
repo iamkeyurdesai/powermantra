@@ -6,7 +6,7 @@
       :mantra="mantras[searchSelect[i].mantra_id]"
       :mantra_id="searchSelect[i].mantra_id"
       :script="script"      
-    >
+    >    
     </renderItem>
   </div>
 </template>

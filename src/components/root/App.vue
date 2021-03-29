@@ -49,7 +49,7 @@
         :value="zz"
         color="primary--text"
       >
-        <span class="caption" :id="`main_${zz}`">{{ zz }}</span>
+        <span :id="`main_${zz}`">{{ zz }}</span>
         <v-icon>{{ menu.mainIcons[k] }}</v-icon>
       </v-btn>
     </v-bottom-navigation>

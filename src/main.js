@@ -6,8 +6,10 @@ import router from './router'
 import {store} from './store/index.js'
 import AudioVisual from 'vue-audio-visual'
 import VueYoutube from 'vue-youtube'
+import VueSocialSharing from 'vue-social-sharing'
 Vue.use(VueYoutube)
 Vue.use(AudioVisual)
+Vue.use(VueSocialSharing)
 
 Vue.config.productionTip = false
 Vue.config.performance = true

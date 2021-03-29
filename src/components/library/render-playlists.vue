@@ -1,39 +1,23 @@
 <template>
   <div>
     <v-container>
-      <v-row dense>
+      <v-row >
         <v-col v-for="(item, i) in ownedPlaylists" :key="i" cols="12">
-          <v-card dense>
-            <div class="d-flex flex-no-wrap justify-space-between">
-              <div>
-                <v-card-title
-                  class="subtitle-2"
-                  v-text="item.name"
-                ></v-card-title>
-
-                <!-- <v-card-subtitle v-text="item.artist"></v-card-subtitle> -->
-                <v-card-subtitle class="body-2">Lotsandlots</v-card-subtitle>
-
-                <v-card-actions class="ma-0">
-                  <v-btn left x-small @click="loadSelectedPlaylist(item)"> open </v-btn>
-                  <v-btn left x-small> share </v-btn>
-                </v-card-actions>
-              </div>
-              <v-divider inset vertical></v-divider>
-              <div>
-                <v-row dense>
-                  <v-card-text class="pa-2 caption">
-                    {{ item.description }}
-                  </v-card-text>
-                </v-row>
-                <v-row dense>
-                  <v-card-text class="pa-2 caption">
-                    {{ item.timestamp.seconds }} | {{ item.mantras.length }} |
-                    {{ item.timestamp.nanoseconds }}
-                  </v-card-text>
-                </v-row>
-              </div>
-            </div>
+          <v-card dense shaped>
+            <v-row dense justify="space-between"  align="center" class="px-4">
+              <v-card-title  class="text-subtitle-1"> {{ item.name }}</v-card-title>
+              <v-btn fab text small><v-icon>mdi-dots-vertical</v-icon></v-btn>
+            </v-row>
+            <v-row dense justify="space-between" align="center" class="px-4">
+              <v-col cols="9">
+              <v-card-text class="ma-0 body-2 text--secondary">
+                {{ item.owner }} &#183; {{ item.mantras.length }} mantra &#183;
+                {{ extractDHMS(item.timestamp.seconds) }} </v-card-text>           
+                </v-col>
+                <v-col cols="3">
+                <socialSharing :sharing="sharingInfo(item)"> </socialSharing>   
+                </v-col>
+            </v-row>
           </v-card>
         </v-col>
       </v-row>
@@ -45,9 +29,14 @@
 <script>
 import { auth } from "@/main.js";
 import { mapState, mapMutations } from "vuex";
+import socialSharing from "./subcomponents/social-sharing.vue";
+
 export default {
   data() {
     return {};
+  },
+  components: {
+    socialSharing,
   },
   computed: {
     ...mapState("firestore", ["ownedPlaylists"]),
@@ -73,8 +62,8 @@ export default {
       }
     },
     loadSelectedPlaylist(item) {
-      console.log(item); 
-      let playlistId = item.tag      
+      console.log(item);
+      let playlistId = item.tag;
       let myTempPath = "/" + "Library" + "/" + "api=1&" + "pl=" + playlistId;
       if (this.path !== myTempPath) {
         this.$router.push(myTempPath);
@@ -89,6 +78,39 @@ export default {
         //    this.$router.push(myTempPath)
         //    console.log(myTempPath)
         //    if(myTempPath !== "/") this.SET_path(myTempPath)
+      }
+    },
+    sharingInfo(item) {
+      let playlistId = item.tag;
+      let myTempPath =
+        "https://powermantra.web.app" +
+        "/" +
+        "Library" +
+        "/" +
+        "api=1&" +
+        "pl=" +
+        playlistId;
+      return {
+        url: myTempPath,
+        title: item.name,
+        description: item.description,
+        quote:
+          "Mantrams are collection of phrases, words and sounds which by virtue of rhythmic effect achieve results that would not be possible apart from them.. - Master Djwhal Khul",
+        hashtags: "mantra, meditation, yoga",
+      };
+    },
+    extractDHMS(secs) {
+      let a = new Date(secs * 1000);
+      a = a.toLocaleString().split(",");
+      let b = new Date();
+      b = b.toLocaleString().split(",");
+      console.log(a, b);
+      if (a[0] == b[0]) {
+        let temp1 = a[1].trim().split(" ");
+        let temp2 = temp1[0].split(":");
+        return temp2[0] + ":" + temp2[1] + " " + temp1[1];
+      } else {
+        return a[0];
       }
     },
   },

@@ -2,8 +2,14 @@
   <v-row justify="center">
     <v-dialog v-model="dialog" scrollable max-width="300px">
       <template v-slot:activator="{ on, attrs }">
-        <v-btn v-bind="attrs" v-on="on" text @click="bindToFirestore('ownedPlaylists')">
-          <v-icon>mdi-plus-box-multiple</v-icon>
+        <v-btn
+          rounded
+          v-bind="attrs"
+          v-on="on"
+          text
+          @click="bindToFirestore('ownedPlaylists')"
+        >
+          <v-icon>mdi-plus-box-multiple</v-icon> save
         </v-btn>
       </template>
       <v-card>
@@ -23,20 +29,20 @@
               :label="list.name"
             ></v-radio>
           </v-radio-group>
-          {{ ownedPlaylists.map(a=>a.mantras) }}
+          <!-- {{ ownedPlaylists.map(a=>a.mantras) }} -->
         </v-card-text>
         <v-alert
-      v-model="alert"
-      border="left"
-      close-text="Close Alert"
-      color="error"
-      dark
-      dismissible
-      class="body-2"
-      dense
-    >
-      {{errMsg}}
-    </v-alert>
+          v-model="alert"
+          border="left"
+          close-text="Close Alert"
+          color="error"
+          dark
+          dismissible
+          class="body-2"
+          dense
+        >
+          {{ errMsg }}
+        </v-alert>
         <v-divider></v-divider>
 
         <v-card-actions>
@@ -44,12 +50,11 @@
             <template v-slot:activator="{ on, attrs }">
               <v-btn
                 v-bind="attrs"
-                v-on="on"
                 color="primary"
                 small
                 text
                 class="text-none"
-                @click="nameBox = true"
+                @click="openNameBox()"
               >
                 <v-icon>mdi-playlist-plus</v-icon>
                 Create new playlist
@@ -66,7 +71,12 @@
                       dense
                       clearable
                       class="caption"
-                      :rules="[rulesName.required, rulesName.counterMax, rulesName.counterMin, rulesName.name]"                      
+                      :rules="[
+                        rulesName.required,
+                        rulesName.counterMax,
+                        rulesName.counterMin,
+                        rulesName.name,
+                      ]"
                     ></v-text-field>
                   </v-row>
                   <v-row class="mt-3">
@@ -80,7 +90,11 @@
                       hint="A brief description of the playlist"
                       persistent-hint
                       class="caption"
-                      :rules="[rulesDescription.required, rulesDescription.counterMin, rulesDescription.counterMax,]"
+                      :rules="[
+                        rulesDescription.required,
+                        rulesDescription.counterMin,
+                        rulesDescription.counterMax,
+                      ]"
                     ></v-textarea>
                   </v-row>
                 </v-container>
@@ -122,20 +136,23 @@ export default {
       errMsg: "",
       alert: false,
       rulesDescription: {
-          required: value => !!value || 'Required.',
-          counterMin: value => value.trim().length > 50 || 'Min 50 characters',
-          counterMax: value => value.trim().length <= 250 || 'Max 250 characters'
-          },
+        required: (value) => !!value || "Required.",
+        counterMin: (value) => value.trim().length > 50 || "Min 50 characters",
+        counterMax: (value) =>
+          value.trim().length <= 250 || "Max 250 characters",
+      },
       rulesName: {
-          required: value => !!value || 'Required.',
-          counterMin: value => value.trim().length > 1 || 'Min 2 characters',
-          counterMax: value => value.trim().length <= 35 || 'Max 35 characters',
-          name: value => this.takenPlaylistNames.includes(value.trim())==false || 'Already exists',
-          // name: value => {
-          //   const pattern = /[^A-Za-z0-9]/
-          //   return pattern.test(value)==false || 'No special characters'
-          // },
-      }
+        required: (value) => !!value || "Required.",
+        counterMin: (value) => value.trim().length > 1 || "Min 2 characters",
+        counterMax: (value) => value.trim().length <= 35 || "Max 35 characters",
+        name: (value) =>
+          this.takenPlaylistNames.includes(value.trim()) == false ||
+          "Already exists",
+        // name: value => {
+        //   const pattern = /[^A-Za-z0-9]/
+        //   return pattern.test(value)==false || 'No special characters'
+        // },
+      },
     };
   },
   props: {
@@ -146,31 +163,44 @@ export default {
     // ...mapState(["firestore", "ownedPlaylists"]), //this was a bad bad mistake. wasted 5 hours.
     ...mapState("firestore", ["ownedPlaylists"]),
     takenPlaylistNames() {
-      return this.ownedPlaylists.map(a => a.name)
+      return this.ownedPlaylists.map((a) => a.name);
     },
   },
   methods: {
-    saveToPlaylist() {      
-      if(this.ownedPlaylists[this.dialogm1].mantras.length>8) {
-        this.errMsg = "Playlist too long: start new or delete entries."
-        this.alert = true
-      } else if(this.ownedPlaylists[this.dialogm1].mantras.filter(a => a===this.whichMantra).length > 4) {
-        this.errMsg = "A mantra can be added up to 5 times."
-        this.alert = true
+    openNameBox() {
+      if (auth.currentUser == null) {
+        this.errMsg = "Sing In to create playlist.";
+        this.alert = true;
+        this.nameBox = false;
       } else {
-        this.alert = false
-        let newArray = [...this.ownedPlaylists[this.dialogm1].mantras]
-        newArray.push(this.whichMantra)         
+        this.nameBox = true;
+      }
+    },
+    saveToPlaylist() {
+      if (this.ownedPlaylists[this.dialogm1].mantras.length > 8) {
+        this.errMsg = "Playlist too long: start new or delete entries.";
+        this.alert = true;
+      } else if (
+        this.ownedPlaylists[this.dialogm1].mantras.filter(
+          (a) => a === this.whichMantra
+        ).length > 4
+      ) {
+        this.errMsg = "A mantra can be added up to 5 times.";
+        this.alert = true;
+      } else {
+        this.alert = false;
+        let newArray = [...this.ownedPlaylists[this.dialogm1].mantras];
+        newArray.push(this.whichMantra);
         db.collection("userdata")
-        .doc(auth.currentUser.uid)
-        .collection("playlists")
-        .doc(this.ownedPlaylists[this.dialogm1].id)
-        .update({                    
-          mantras: newArray,
-          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-        });
-        this.dialog = false
-        this.$emit("saveSuccess",this.ownedPlaylists[this.dialogm1].name)        
+          .doc(auth.currentUser.uid)
+          .collection("playlists")
+          .doc(this.ownedPlaylists[this.dialogm1].id)
+          .update({
+            mantras: newArray,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+          });
+        this.dialog = false;
+        this.$emit("saveSuccess", this.ownedPlaylists[this.dialogm1].name);
       }
     },
     addNewPlaylist() {
@@ -189,22 +219,26 @@ export default {
           timestamp: firebase.firestore.FieldValue.serverTimestamp(),
         });
       this.nameBox = false;
+      this.dialog = false;
+      this.$emit("saveSuccess", this.ownedPlaylists[this.dialogm1].name);
     },
-    uniqueTag(){
+    uniqueTag() {
       let d = new Date();
-      let n = d.getTime().toString(36)
-      return n + auth.currentUser.uid.slice(1,4)
+      let n = d.getTime().toString(36);
+      return n + auth.currentUser.uid.slice(1, 4);
     },
-    bindToFirestore(value) {      
+    bindToFirestore(value) {
+      if (auth.currentUser != null) {
         if (this[value].length == 0) {
-        this.$store.dispatch("firestore/bindUserdata", {
-          path: "/userdata/" + auth.currentUser.uid + "/playlists",
-          includQuery: false,
-          // query: [this.message1, this.message2, this.message3],
-          whereToBind: value,
-        });
-      } else {
-        console.log("ownedPlaylists already loaded");
+          this.$store.dispatch("firestore/bindUserdata", {
+            path: "/userdata/" + auth.currentUser.uid + "/playlists",
+            includQuery: false,
+            // query: [this.message1, this.message2, this.message3],
+            whereToBind: value,
+          });
+        } else {
+          console.log("ownedPlaylists already loaded");
+        }
       }
     },
   },

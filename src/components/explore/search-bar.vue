@@ -37,15 +37,15 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col class="text-center text--secondary">
-        <div class="body-2">Browse by</div>
+      <v-col class="text-center text--primary">
+        <div class="body-1">Browse by</div>
         <v-btn
           outlined
           rounded
+          text
           v-for="(item, i) in filterByOptions"
           :key="i"
-          class="text-none text--primary ma-2"          
-          small
+          class="text-none text--primary ma-2"                    
           @click="findUnique(item)"
         >
           {{ item }}</v-btn

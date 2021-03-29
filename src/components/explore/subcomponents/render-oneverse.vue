@@ -51,16 +51,15 @@
           /></span>
         </span>
       </div>
-      <div class="font-weight-light caption" v-if="mantra.mantra.length > 1">
+      <div class="font-weight-light body-1" v-if="mantra.mantra.length > 1">
         (v-{{whichVerse+1}})
         </div>
         <div >
-          <v-btn x-small text class="font-weight-bold">
-            <v-icon small @click="secondScriptOn = false" v-if="secondScriptOn" color="success"
+          <v-btn fab small text class="font-weight-bold">
+            <v-icon @click="secondScriptOn = false" v-if="secondScriptOn" color="success"
               >mdi-format-title</v-icon
             >
-            <v-icon
-              small              
+            <v-icon                      
               @click="secondScriptOn = true"
               v-if="!secondScriptOn" color="error"
             >
@@ -70,10 +69,10 @@
         </div>      
     </div>
     <div>
-      <v-card-text  v-html="mantra.mantraenglish[whichVerse]">              
+      <v-card-text  class="text--primary body-1" v-html="mantra.mantraenglish[whichVerse]">              
       </v-card-text>
     </div>
-    <v-divider inset class="mb-4"></v-divider>
+    <v-divider inset v-if="(whichVerse+1) < mantra.mantra.length" class="mb-4"></v-divider>
   </div>
 </template>
 
@@ -141,5 +140,9 @@ export default {
   color: #f1e9e9;
   border-radius: 6px;
   font-size: 14px;
-}
+};
+span {
+  font-size: 1.25rem;
+};
+
 </style>
