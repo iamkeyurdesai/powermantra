@@ -9,7 +9,7 @@
       <v-container v-if="mantra">
         <v-row>
           <v-col>
-            <v-card class="text-justify" flat outlined shaped>
+            <v-card class="text-justify pa-2" flat>
               <v-row align="center" justify="center" class="ma-3">
               <span class="text-h5 success--text">{{ mantra.name }}</span>
               </v-row>
@@ -116,7 +116,9 @@
                   :mantra_id="mantra_id"
                 ></renderMantra>
               </div>              
-            </v-card>            
+            </v-card>    
+            <v-divider></v-divider>        
+            <v-divider></v-divider>                    
           </v-col>
         </v-row>        
       </v-container>
