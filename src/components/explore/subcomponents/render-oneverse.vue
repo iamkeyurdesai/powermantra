@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-row justify="space-between" class="ma-3" v-if="whichVerse==0">      
+    <v-row justify="space-between" align="center" class="ma-3" v-if="whichVerse==0">      
     <div class="info--text"> Sanskrit with translation</div>
     <div>
       <savePlaylist :whichMantra="mantra.id" v-on:saveSuccess="saveSuccessMsgAlert"></savePlaylist>
@@ -19,7 +19,7 @@
       <strong> {{mantra.name}} </strong> was added to <strong> {{saveSuccessInfo}} </strong>. Go to <strong> Library </strong> for your playlists. 
     </v-alert>
     <div class="d-flex justify-center">
-      <div align="left">
+      <div align="start">
         <span v-for="(item, i) in myMantra" :key="item + i">
           <span
             v-for="(item1, j) in item.split(',')"
@@ -51,6 +51,7 @@
           /></span>
         </span>
       </div>
+      <div>
       <div class="font-weight-light body-1" v-if="mantra.mantra.length > 1">
         (v-{{whichVerse+1}})
         </div>
@@ -66,13 +67,14 @@
               mdi-format-clear</v-icon
             >
           </v-btn>
+        </div>
         </div>      
     </div>
-    <div>
-      <v-card-text  class="text--primary body-1" v-html="mantra.mantraenglish[whichVerse]">              
-      </v-card-text>
+    <div class="fsIncrease" v-html="mantra.mantraenglish[whichVerse]">
+      <!-- <v-card-text  class="text--primary body-1" v-html="mantra.mantraenglish[whichVerse]">              
+      </v-card-text> -->
     </div>
-    <v-divider inset v-if="(whichVerse+1) < mantra.mantra.length" class="mb-4"></v-divider>
+    <v-divider inset v-if="(whichVerse+1) < mantra.mantra.length" class="my-3"></v-divider>
   </div>
 </template>
 
@@ -142,7 +144,9 @@ export default {
   font-size: 14px;
 };
 span {
-  font-size: 1.25rem;
+  font-size: 1.375rem;
 };
-
+.fsIncrease {
+   font-size: 1.25rem;
+ }
 </style>

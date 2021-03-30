@@ -15,7 +15,7 @@
 
 <script>
 // import renderItem from "./render-item";
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 import {db} from "@/main.js"
 
 export default {
@@ -42,6 +42,7 @@ mydata.get().then((querySnapshot) => {
     ...mapState("firestore", ["sharedPlaylists"]),    
   },
   methods: {
+    ...mapMutations("parameters", ["SET_value"]),
     bindToFirestore(value) {            
         if (this[value].length == 0) {
           console.log('I am here')
@@ -56,8 +57,16 @@ mydata.get().then((querySnapshot) => {
       } else {
         console.log("ownedPlaylists already loaded");
       }
-    },
+    },    
   },
+  beforeRouteLeave(to,from,next) {
+    // called when the route that renders this component is about to
+    // be navigated away from.
+    // has access to `this` component instance.
+    this.SET_value({list: null, id: "pl"})
+    console.log(this.pl)
+    next();
+  }
 };
 </script>
 

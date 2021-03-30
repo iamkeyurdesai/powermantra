@@ -2,11 +2,12 @@
   <v-row justify="center">
     <v-dialog v-model="dialog" scrollable max-width="300px">
       <template v-slot:activator="{ on, attrs }">
-        <v-btn
+        <v-btn          
           rounded
           v-bind="attrs"
           v-on="on"
           text
+          x-large
           @click="bindToFirestore('ownedPlaylists')"
         >
           <v-icon>mdi-plus-box-multiple</v-icon> save

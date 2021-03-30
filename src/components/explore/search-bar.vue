@@ -19,17 +19,17 @@
         >
         </v-text-field>
         <v-card v-if="focus" class="ma-0">
-          <v-card max-height="35vh" class="overflow-y-auto">
+          <v-card max-height="100vh" class="overflow-y-auto">
             <div
               class="pa-2"
               flat
               v-for="(item, i) in searchResults"
               :key="i"
-              @click="goToSelectedItem(item)"
+              @click="goToSelectedItem(item)"              
             >
-              <span :class="myNameStyle(i)"> {{ item.name }} </span> |
-              <span :class="myVerseTextStyle(i)"> {{ item.mantra }} || 
-              <span v-if="item.verse_id>0">  (v-{{item.verse_id}})</span></span>
+              <span  :class="myNameStyle(i)"> {{ item.name }} </span> |
+              <span  :class="myVerseTextStyle(i)"> {{ item.mantra }} || 
+              <span   v-if="item.verse_id>0">  (v-{{item.verse_id}})</span></span>
               <v-divider></v-divider>
             </div>
           </v-card>

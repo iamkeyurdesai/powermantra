@@ -35,7 +35,7 @@
                 </v-btn>
               </v-row>
 
-              <v-row justify="space-between" class="ma-4">
+              <v-row justify="space-between" align="center" class="ma-3">
                 <span class="info--text">Background on {{ mantra.name }}</span>
                 <v-btn text small rounded class="text--secondary">
                   <v-icon @click="backgroundOn = false" v-if="backgroundOn"
@@ -49,7 +49,8 @@
 
               <v-fade-transition leave-absolute>
                 <div v-if="backgroundOn">
-                  <v-card-text class="text--primary text-body-1">
+                  <!-- <v-card-text class="text--primary text-body-1"> -->
+                    <div class="fsIncrease">
                     This is a <strong>{{ mantra.Category }}</strong
                     >. The diety of this mantra is
                     <strong>{{ mantra.Deity }}</strong
@@ -60,7 +61,8 @@
                     >. The key application of this mantra is toward
                     <strong>{{ mantra.Application }}</strong
                     >.
-                  </v-card-text>
+                    </div>
+                  <!-- </v-card-text> -->
                   <v-tabs v-model="tab" right>
                     <v-tab
                       v-for="item in items"
@@ -73,8 +75,12 @@
 
                   <v-tabs-items v-model="tab">
                     <v-tab-item v-for="item in items" :key="item">
-                      <v-card color="basil" flat>
-                        <v-card-text class="text--primary body-1">{{ mantra[item] }}</v-card-text>
+                      <v-card color="basil" flat>                        
+                        <!-- <v-card-text class="text--primary body-1"> -->
+                          <div class="fsIncrease">
+                          {{ mantra[item] }}
+                          </div>
+                          <!-- </v-card-text>                           -->
                       </v-card>
                     </v-tab-item>
                   </v-tabs-items>
@@ -157,4 +163,7 @@ export default {
 };
 </script>
  <style lang="scss" scoped>
+ .fsIncrease {
+   font-size: 1.25rem;
+ }
 </style>

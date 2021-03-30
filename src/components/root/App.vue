@@ -65,7 +65,7 @@
 import firebaseAuth from "./firebase-auth.vue";
 import userProfile from "./user-profile.vue";
 import settingsPopup from "@/components/settings/settings-popup.vue"
-import { mapState, mapMutations, mapGetters } from "vuex";
+import { mapState, mapMutations } from "vuex";
 import { auth } from "@/main.js";
 export default {
   data() {
@@ -103,16 +103,14 @@ export default {
       },
     },
   },
-  methods: {
-    ...mapGetters("settings", ["GET_dark"]),
+  methods: {    
     ...mapMutations("parameters", [
       "SET_authenticated",
       "SET_photoURL",
       "SET_mainItem",
       "SET_path",
       "SET_userName",
-    ]),
-    ...mapGetters("settings", ["GET_dark"]),
+    ]),    
   },
   mounted() {
     auth.onAuthStateChanged((user) => {
@@ -125,6 +123,7 @@ export default {
         this.SET_photoURL("not signed in");
       }
     });
+    this.$vuetify.theme.isDark = this.themeDark
   },
 };
 </script>

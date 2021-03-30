@@ -17,6 +17,10 @@ Vue.config.performance = true
 
 // set up global routing
 router.beforeEach((to, from, next) => {
+  // store.commit('parameters/SET_value', {
+  //   list: null,
+  //   id: "pl"
+  // })
   if (to.path !== "/") {
     let mypath = to.path.split("/");
     if (mypath[1] != null) store.state.parameters.mainItem = mypath[1];

@@ -1,27 +1,23 @@
 <template>
   <div>
-    <v-container>
-      <v-row >
-        <v-col v-for="(item, i) in ownedPlaylists" :key="i" cols="12">
-          <v-card dense shaped>
-            <v-row dense justify="space-between"  align="center" class="px-4">
-              <v-card-title  class="text-subtitle-1"> {{ item.name }}</v-card-title>
-              <v-btn fab text small><v-icon>mdi-dots-vertical</v-icon></v-btn>
-            </v-row>
-            <v-row dense justify="space-between" align="center" class="px-4">
-              <v-col cols="9">
-              <v-card-text class="ma-0 body-2 text--secondary">
-                {{ item.owner }} &#183; {{ item.mantras.length }} mantra &#183;
-                {{ extractDHMS(item.timestamp.seconds) }} </v-card-text>           
-                </v-col>
-                <v-col cols="3">
-                <socialSharing :sharing="sharingInfo(item)"> </socialSharing>   
-                </v-col>
-            </v-row>
-          </v-card>
-        </v-col>
+    
+    <v-card v-for="(item, i) in ownedPlaylists" :key="i" class="pa-4 mx-0 my-2">
+      <v-row justify="space-between">
+        <span>{{ item.name }}</span>
+        <playlistInfo :item="item" :mantras="mantras"></playlistInfo>
       </v-row>
-    </v-container>
+      <v-row justify="space-between">
+        <div class="body-2 text--secondary">
+          {{ item.owner }} &#183; {{ item.mantras.length }}
+          {{ item.mantras.length > 1 ? "mantras" : "mantra" }} &#183;
+          {{ extractDHMS(item.timestamp.seconds) }}
+        </div>
+        <div class="body-2 text--secondary">
+          <v-btn x-small text @click="viewPlaylist(item)"> <v-icon>mdi-playlist-play</v-icon> </v-btn>
+        </div>
+      </v-row>
+    </v-card>
+  
   </div>
 </template>
 
@@ -29,17 +25,21 @@
 <script>
 import { auth } from "@/main.js";
 import { mapState, mapMutations } from "vuex";
-import socialSharing from "./subcomponents/social-sharing.vue";
+// import socialSharing from "./subcomponents/social-sharing.vue";
+import playlistInfo from "./subcomponents/playlist-info.vue"
 
 export default {
   data() {
-    return {};
+    return {      
+    };
   },
   components: {
-    socialSharing,
+    // socialSharing,
+    playlistInfo
   },
   computed: {
-    ...mapState("firestore", ["ownedPlaylists"]),
+    ...mapState("firestore", ["ownedPlaylists"]),    
+    ...mapState("coretext", ["mantras"]),
   },
   mounted() {
     setTimeout(() => {
@@ -79,26 +79,7 @@ export default {
         //    console.log(myTempPath)
         //    if(myTempPath !== "/") this.SET_path(myTempPath)
       }
-    },
-    sharingInfo(item) {
-      let playlistId = item.tag;
-      let myTempPath =
-        "https://powermantra.web.app" +
-        "/" +
-        "Library" +
-        "/" +
-        "api=1&" +
-        "pl=" +
-        playlistId;
-      return {
-        url: myTempPath,
-        title: item.name,
-        description: item.description,
-        quote:
-          "Mantrams are collection of phrases, words and sounds which by virtue of rhythmic effect achieve results that would not be possible apart from them.. - Master Djwhal Khul",
-        hashtags: "mantra, meditation, yoga",
-      };
-    },
+    },    
     extractDHMS(secs) {
       let a = new Date(secs * 1000);
       a = a.toLocaleString().split(",");
@@ -113,6 +94,18 @@ export default {
         return a[0];
       }
     },
+    viewPlaylist(item) {
+      let playlistId = item.tag;
+      let myTempPath =
+        // "https://powermantra.web.app" +
+        "/" +
+        "Library" +
+        "/" +
+        "api=1&" +
+        "pl=" +
+        playlistId;        
+        this.$router.push(myTempPath)
+    }      
   },
 };
 </script>

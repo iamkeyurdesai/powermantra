@@ -1,18 +1,19 @@
 <template>
+
   <div class="text-xs-center">
-    <v-dialog
+    <v-dialog      
       v-model="sheet"
       hide-overlay
       scrollable
       transition="dialog-bottom-transition"
     >
       <template v-slot:activator="{}">
-        <v-btn v-show="true"  text @click="sheet = true">
+        <v-btn text @click="sheet = true">
           <v-icon medium color="blue lighten-3"> mdi-format-size</v-icon>
         </v-btn>
       </template>
   
-    
+
     <v-card>    
       <v-toolbar flat dark color="primary" >
         <v-btn dark icon small @click.native="sheet = false">
@@ -27,24 +28,25 @@
   <div class="caption">{{convert(script)}}</div>
       </v-toolbar>
 
-    <v-card class="px-2 my-3" v-if="isScript">
-        <strong>script: </strong>
+    <v-card class="ma-3 pa-3" v-if="isScript" outlined shaped>
+        <strong>Select script: </strong>
         <v-btn small  class="ma-2 pa-1" v-for="(item) in options.script" @click="script=item" :key="item" 
         :outlined="script===item" :rounded="script!==item">
           <span>{{convert(item)}}
             <v-icon small v-if="script===item">mdi-check </v-icon> </span></v-btn>
       </v-card>
-            <v-card class="pa-1 my-3" v-if="isTheme">
-            <strong>Theme: </strong>
+            <v-card class="ma-3 pa-3" v-if="isTheme" outlined shaped>
+            <strong>Dark theme: </strong>
             <v-switch
-              v-model="themeDark"
-              label="dark"
-              color="black"              
+              v-model="themeDark"              
+              color="warning"              
             ></v-switch>            
           </v-card>
 </v-card>
+
 </v-dialog>
 </div>
+
 </template>
 
 <script>
@@ -72,9 +74,9 @@ export default {
         return this.$store.state.parameters.themeDark;
       },
       set(value) {
-        this.SET_themeDark(value);
         this.$vuetify.theme.isDark=value                
-        console.log(this.$store.state.firestore.userdata)
+        this.SET_themeDark(value);        
+        // console.log(this.$store.state.firestore.userdata)
       },
     },
     script: {
