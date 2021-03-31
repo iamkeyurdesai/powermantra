@@ -44,13 +44,13 @@ export default {
   mounted() {
     setTimeout(() => {
       this.bindToFirestore("ownedPlaylists");
-    }, 5000);
+    }, 1000);
   },
   methods: {
     ...mapMutations("parameters", ["SET_value"]),
-    bindToFirestore(value) {
-      console.log(auth.currentUser.uid);
+    bindToFirestore(value) {      
       if (this[value].length == 0) {
+        console.log('I am in bindToFireStore')
         this.$store.dispatch("firestore/bindUserdata", {
           path: "/userdata/" + auth.currentUser.uid + "/playlists",
           includQuery: false,
@@ -61,31 +61,16 @@ export default {
         console.log("ownedPlaylists already loaded");
       }
     },
-    loadSelectedPlaylist(item) {
-      console.log(item);
+    loadSelectedPlaylist(item) {      
       let playlistId = item.tag;
-      let myTempPath = "/" + "Library" + "/" + "api=1&" + "pl=" + playlistId;
-      if (this.path !== myTempPath) {
-        this.$router.push(myTempPath);
-        console.log(myTempPath);
-        if (myTempPath !== "/")
-          this.SET_value({ list: myTempPath, id: "path" });
-
-        // let myTempPath = '/' + this.mainItem + '/' + 'api=1' + '&activeTab=' + this.activeTab +
-        //    '&chapter=' + this.chapter + '&verse=' + this.verse + '&theme=' + this.theme + '&language=' + this.language +
-        //    '&script=' + this.script + '&fsize=' + this.fsize
-        //    if(this.path !== myTempPath) {
-        //    this.$router.push(myTempPath)
-        //    console.log(myTempPath)
-        //    if(myTempPath !== "/") this.SET_path(myTempPath)
-      }
+      let myTempPath = "/" + "Library" + "/" + "pl=" + playlistId;
+      this.$router.push(myTempPath);      
     },    
     extractDHMS(secs) {
       let a = new Date(secs * 1000);
       a = a.toLocaleString().split(",");
       let b = new Date();
-      b = b.toLocaleString().split(",");
-      console.log(a, b);
+      b = b.toLocaleString().split(",");      
       if (a[0] == b[0]) {
         let temp1 = a[1].trim().split(" ");
         let temp2 = temp1[0].split(":");
@@ -100,8 +85,7 @@ export default {
         // "https://powermantra.web.app" +
         "/" +
         "Library" +
-        "/" +
-        "api=1&" +
+        "/" +        
         "pl=" +
         playlistId;        
         this.$router.push(myTempPath)

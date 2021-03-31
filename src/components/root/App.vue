@@ -85,21 +85,21 @@ export default {
       "authenticated",
       "photoURL",
       "script",
-      "fsize",
-      "path",
-      "themeDark"
+      "fsize",      
+      "themeDark",
+      "pl"
     ]),
     mainItem: {
       get() {
         return this.$store.state.parameters.mainItem;
       },
       set(value) {
-        this.SET_mainItem(value);
+        this.SET_mainItem(value);        
         let myTempPath = "/" + this.mainItem;
-        if (this.path !== myTempPath) {
-          this.$router.push(myTempPath);
-          if (myTempPath !== "/") this.SET_path(myTempPath);
+        if(this.mainItem=='Library' & this.pl!==null) {
+          myTempPath = myTempPath + "/pl=" + this.pl
         }
+          this.$router.push(myTempPath);
       },
     },
   },
@@ -107,8 +107,7 @@ export default {
     ...mapMutations("parameters", [
       "SET_authenticated",
       "SET_photoURL",
-      "SET_mainItem",
-      "SET_path",
+      "SET_mainItem",    
       "SET_userName",
     ]),    
   },

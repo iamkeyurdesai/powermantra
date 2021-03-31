@@ -63,8 +63,7 @@ export default {
         "https://powermantra.web.app" +
         "/" +
         "Library" +
-        "/" +
-        "api=1&" +
+        "/" +        
         "pl=" +
         playlistId;
       return {
@@ -82,8 +81,7 @@ export default {
         // "https://powermantra.web.app" +
         "/" +
         "Library" +
-        "/" +
-        "api=1&" +
+        "/" +        
         "pl=" +
         playlistId;        
         this.$router.push(myTempPath)

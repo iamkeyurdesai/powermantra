@@ -27,7 +27,7 @@ const loadText = function ({ commit }) {
       )
     }
   }).then(() => {
-    console.log(this.state.coretext.mantras)
+    // console.log(this.state.coretext.mantras)
   });
 };
 

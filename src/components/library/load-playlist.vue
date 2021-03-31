@@ -16,7 +16,7 @@
 <script>
 // import renderItem from "./render-item";
 import { mapState, mapMutations } from "vuex";
-import {db} from "@/main.js"
+// import {db} from "@/main.js"
 
 export default {
   data() {
@@ -26,13 +26,13 @@ export default {
     // renderItem,
   },
   mounted() {
-    console.log(this.pl)
-    var mydata = db.collectionGroup('playlists').where('tag', '==', this.pl);
-mydata.get().then((querySnapshot) => {
-    querySnapshot.forEach((doc) => {
-        console.log(doc.id, ' => ', doc.data());
-    });
-});
+//     console.log(this.pl)
+//     var mydata = db.collectionGroup('playlists').where('tag', '==', this.pl);
+// mydata.get().then((querySnapshot) => {
+//     querySnapshot.forEach((doc) => {
+//         console.log(doc.id, ' => ', doc.data());
+//     });
+// });
     setTimeout(() => {
       this.bindToFirestore("sharedPlaylists");
     }, 1000);
@@ -45,7 +45,7 @@ mydata.get().then((querySnapshot) => {
     ...mapMutations("parameters", ["SET_value"]),
     bindToFirestore(value) {            
         if (this[value].length == 0) {
-          console.log('I am here')
+          console.log('I am in bindToFireStore')
         this.$store.dispatch("firestore/bindUserdata", {
           path: "playlists",
           includQuery: true,
@@ -58,14 +58,6 @@ mydata.get().then((querySnapshot) => {
         console.log("ownedPlaylists already loaded");
       }
     },    
-  },
-  beforeRouteLeave(to,from,next) {
-    // called when the route that renders this component is about to
-    // be navigated away from.
-    // has access to `this` component instance.
-    this.SET_value({list: null, id: "pl"})
-    console.log(this.pl)
-    next();
   }
 };
 </script>

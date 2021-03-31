@@ -17,29 +17,35 @@ Vue.config.performance = true
 
 // set up global routing
 router.beforeEach((to, from, next) => {
-  // store.commit('parameters/SET_value', {
-  //   list: null,
-  //   id: "pl"
-  // })
+  // set default parameters which will load 
+  // the root paths (/library, /explore, /history)
+  // if the pushed link has additional parameters they 
+  // will be picked and the desired path will be loaded  
+  if(to.path.includes('Library') && !to.path.includes("pl=")) {
+  store.commit('parameters/SET_value', {
+    list: null,
+    id: "pl"
+  })
+  }
+
   if (to.path !== "/") {
     let mypath = to.path.split("/");
     if (mypath[1] != null) store.state.parameters.mainItem = mypath[1];
     if (to.params.data != null) {
-      if (to.params.data.includes("api=1")) {
+      
         let myquery = to.params.data.split("&");
         let i;
-        for (i = 1; i < myquery.length; i++) {
+        for (i = 0; i < myquery.length; i++) {
           let temp = myquery[i].split("=")
           store.commit('parameters/SET_value', {
             list: temp[1],
             id: temp[0]
           })
-        }
-      } else {
-        console.log("api=1 not found")
-      }
+        }      
     }
-  }
+  } else {
+    store.state.parameters.mainItem = "Explore"
+  } 
   next()
 })
 
@@ -120,7 +126,9 @@ new Vue({
   store,
   render: h => h(App),
   created() {    
-    db.enablePersistence({synchronizeTabs:true}).then(()=>{console.log("offline persistence enabled!")})
+    db.enablePersistence({synchronizeTabs:true}).then(()=>{
+      // console.log("offline persistence enabled!")
+    })
     this.$store.dispatch('coretext/loadText')
     //this.$store.dispatch('firestore/bindUserdata')
   }

@@ -34,10 +34,7 @@ export default {
     loadPlaylist,
     chantingTimer,
   },
-  mounted() {
-    if(!this.$router.currentRoute.path.includes('pl=')) {
-      this.SET_value({ list: null, id: "pl" })
-    }
+  mounted() {    
   },
   computed: {
     ...mapState("parameters", ["chantingON", "pl"]),

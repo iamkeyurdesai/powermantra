@@ -13,7 +13,7 @@ export default {
   actions: {
     bindUserdata: firestoreAction(({ bindFirestoreRef }, payload) => {
       if(payload.collectionGroupQuery) {
-        console.log(payload)
+        // console.log(payload)
         return bindFirestoreRef(payload.whereToBind, db.collectionGroup(payload.path)     
         .where(payload.query[0], payload.query[1], payload.query[2]))
       } else if (payload.includeQuery) {

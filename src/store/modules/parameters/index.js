@@ -19,7 +19,10 @@ const state = {
     {mantra_id:4, verse_id:0},
     {mantra_id:5, verse_id:0}],
   chantingON: false,
-  pl: null
+  pl: null,
+  pathLibrary: "/Library",
+  pathHistory: "/History",
+  pathExplore: "/Explore",    
 };
 
 export default {
