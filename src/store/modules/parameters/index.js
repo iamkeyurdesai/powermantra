@@ -18,11 +18,11 @@ const state = {
   searchSelect: [{mantra_id:3, verse_id:0},
     {mantra_id:4, verse_id:0},
     {mantra_id:5, verse_id:0}],
-  chantingON: false,
-  pl: null,
-  pathLibrary: "/Library",
-  pathHistory: "/History",
-  pathExplore: "/Explore",    
+  ce: false, //chanting on for explore
+  cl: false, //chanting on for library
+  pl: null, //pl is passed through url for the library
+  plOwned: false, //is pl created by the user?
+  mn: null, //mantra number in an encoded string format, name.subset$mantra_id$verse_id, 
 };
 
 export default {

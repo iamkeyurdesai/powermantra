@@ -21,17 +21,31 @@ router.beforeEach((to, from, next) => {
   // the root paths (/library, /explore, /history)
   // if the pushed link has additional parameters they 
   // will be picked and the desired path will be loaded  
-  if(to.path.includes('Library') && !to.path.includes("pl=")) {
-  store.commit('parameters/SET_value', {
-    list: null,
-    id: "pl"
-  })
-  }
+  // let pathTag = [
+  //   {path: 'Library', data: 'pl'}, 
+  //   // {path: 'Explore', data: 'mn'}, 
+  // ]
+  let pathTag = store.state.settings.pathTag
+  for (let index = 0; index < pathTag.length; index++) {
+    if(to.path.includes(pathTag[index].path) && !to.path.includes(pathTag[index].data + '=')) {          
+      store.commit('parameters/SET_value', {
+        list: null,
+        id: pathTag[index].data
+      })
+    }
+  }  
+  //made a loop out of this above
+  // if(to.path.includes('Library') && !to.path.includes("pl=")) {   
+  //   store.commit('parameters/SET_value', {
+  //     list: null,
+  //     id: "pl"
+  //   })
+  // }
 
   if (to.path !== "/") {
     let mypath = to.path.split("/");
     if (mypath[1] != null) store.state.parameters.mainItem = mypath[1];
-    if (to.params.data != null) {
+   if (to.params.data != null) {
       
         let myquery = to.params.data.split("&");
         let i;

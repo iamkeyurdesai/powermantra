@@ -6,7 +6,11 @@ import { menu } from '../../../helpers/menuItems'
 
 const state = {
   options: options,
-  menu: menu
+  menu: menu,
+  pathTag: [
+    { path: 'Library', data: 'pl' }, 
+    {path: 'Explore', data: 'mn'} 
+  ]
 };
 
 export default {

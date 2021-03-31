@@ -1,4 +1,4 @@
-const SET_mainItem = (state, input) => {  
+const SET_mainItem = (state, input) => {
   state.mainItem = input
 };
 const SET_authenticated = (state, input) => {
@@ -22,35 +22,34 @@ const SET_script = (state, input) => {
 const SET_userClaims = (state, input) => {
   state.userClaims = input
 };
-// function SET_value(state, { list, id }) {
-//   if (id == 'chapter' || id == 'verse') {
-//     state[id] = parseInt(list);
-//   } else if (id == 'breakSandhi') {
-//     state[id] = (list == 'true');
-//   } else {
-//     state[id] = list;
-//   }
-// }
 function SET_value(state, { list, id }) {
-    state[id] = list;
+  state[id] = list;
+  //some tags must be handled in a special way 
+  if (id == 'mn' & list!=null) {
+    let myValues = list.split('$')
+    state.searchSelect = [{
+      mantra_id: parseInt(myValues[1]),
+      verse_id: parseInt(myValues[2]===undefined ? 0 : myValues[2]),
+    }]
+  }
 }
-const SET_searchSelect = (state, input) => {
-  state.searchSelect = input
-}
-// const SET_chantingON = (state, input) => {
-//   state.searchSelect = input
-// }
+  const SET_searchSelect = (state, input) => {
+    state.searchSelect = input
+  }
+  // const SET_chantingON = (state, input) => {
+  //   state.searchSelect = input
+  // }
 
 
-export default {
-  SET_mainItem,
-  SET_authenticated,
-  SET_photoURL,
-  SET_userName,
-  SET_path,
-  SET_themeDark,
-  SET_script,
-  SET_userClaims,
-  SET_value,
-  SET_searchSelect,
-};
+  export default {
+    SET_mainItem,
+    SET_authenticated,
+    SET_photoURL,
+    SET_userName,
+    SET_path,
+    SET_themeDark,
+    SET_script,
+    SET_userClaims,
+    SET_value,
+    SET_searchSelect,
+  };

@@ -22,12 +22,27 @@ export default {
   components: {
     renderItem,
   },
-  mounted() {},
+  mounted() {
+    if(this.searchSelect.length==1) {
+      this.goToSelectedItem(this.searchSelect[0])
+    }
+  },
   computed: {
     ...mapState("parameters", ["searchSelect", "script"]),
     ...mapState("coretext", ["mantras"]),
   },
-  methods: {},
+  methods: {
+    goToSelectedItem(item) {      
+      setTimeout(() => {
+        let temp = '#ID_mantra' + item.mantra_id + 'verse' + item.verse_id
+        this.$vuetify.goTo(temp, {
+          duration: 300,
+          offset: -300,
+          easing: "easeInOutCubic",
+        });
+      }, 100);
+    },
+  },
 };
 </script>
 

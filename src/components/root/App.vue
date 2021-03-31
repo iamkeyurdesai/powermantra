@@ -8,14 +8,12 @@
             alt="Error Loading"
           />
         </v-avatar>
-        <span class="ma-1 pa-1 white--text title">
-          Power Mantra</span
-        >
+        <span class="ma-1 pa-1 white--text title"> Power Mantra</span>
       </v-app-bar-title>
       <v-spacer></v-spacer>
       <settingsPopup isScript isTheme></settingsPopup>
       <div v-if="!this.authenticated" class="white--text ma-1 pa-1">
-        <v-btn          
+        <v-btn
           rounded
           @click.native.stop="dialog = true"
           class="white--text ma-1 pa-1 text-none"
@@ -64,7 +62,7 @@
 <script>
 import firebaseAuth from "./firebase-auth.vue";
 import userProfile from "./user-profile.vue";
-import settingsPopup from "@/components/settings/settings-popup.vue"
+import settingsPopup from "@/components/settings/settings-popup.vue";
 import { mapState, mapMutations } from "vuex";
 import { auth } from "@/main.js";
 export default {
@@ -77,52 +75,78 @@ export default {
   components: {
     firebaseAuth,
     userProfile,
-    settingsPopup
+    settingsPopup,
   },
   computed: {
-    ...mapState("settings", ["options", "menu"]),
+    ...mapState("settings", ["options", "menu", "pathTag"]),
     ...mapState("parameters", [
       "authenticated",
       "photoURL",
       "script",
-      "fsize",      
+      "fsize",
       "themeDark",
-      "pl"
+      "pl",
+      "mn"
     ]),
     mainItem: {
       get() {
         return this.$store.state.parameters.mainItem;
       },
       set(value) {
-        this.SET_mainItem(value);        
-        let myTempPath = "/" + this.mainItem;
-        if(this.mainItem=='Library' & this.pl!==null) {
-          myTempPath = myTempPath + "/pl=" + this.pl
+        this.SET_mainItem(value); //sync store with the click
+        //to retain the previous state within each mainItem we would need to push out the 
+        //correct path when we switch the mainItem
+        //since mainItem is reactive this will be executed everytime we switch mainItem
+        //this is a better way than adding a watcher
+        //go to settings/pathTag to update the tags
+        //any number of tags can be added now as long as the correct mechanism to act on the tag 
+        //once updated exists
+        let myTempPath = "/" + this.mainItem + "/"; //beging the path handle
+        for (let index = 0; index < this.pathTag.length; index++) { //cycle through all possible path tags and append 
+          if (//if mainItem equals the pathtag and value of the tag is non-null then append the tag
+            this.mainItem == this.pathTag[index].path &&
+            this[this.pathTag[index].data] != null
+          ) {//if a tag is already appended then append &
+            if (myTempPath.includes("=")) {
+              myTempPath = myTempPath + "&";
+            }//now append the actual tag with its current value in the store
+            myTempPath =
+              myTempPath +
+              this.pathTag[index].data +
+              "=" +
+              this[this.pathTag[index].data];
+          }
         }
-          this.$router.push(myTempPath);
+        // console.log(myTempPath);
+        //older simpler implementation
+        // if(this.mainItem=='Library' & this.pl!==null) {
+        //           myTempPath = myTempPath + "/pl=" + this.pl
+        //         }        
+        //now push out the correct path
+        this.$router.push(myTempPath);
       },
     },
   },
-  methods: {    
+  methods: {
     ...mapMutations("parameters", [
       "SET_authenticated",
       "SET_photoURL",
-      "SET_mainItem",    
+      "SET_mainItem",
       "SET_userName",
-    ]),    
+    ]),
   },
   mounted() {
     auth.onAuthStateChanged((user) => {
       if (user) {
         this.SET_authenticated(true);
         this.SET_photoURL(user.photoURL);
-        this.SET_userName(user.displayName);        
+        this.SET_userName(user.displayName);
       } else {
         this.SET_authenticated(false);
         this.SET_photoURL("not signed in");
       }
     });
-    this.$vuetify.theme.isDark = this.themeDark
+    this.$vuetify.theme.isDark = this.themeDark;
   },
 };
 </script>

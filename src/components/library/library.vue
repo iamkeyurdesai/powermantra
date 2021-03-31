@@ -1,25 +1,14 @@
 <template>
   <div>    
-    <div v-if="!chantingON">     
+      
     <renderPlaylists v-if="pl==null"> </renderPlaylists>
-    <loadPlaylist v-if="pl!=null"> </loadPlaylist>
-    </div>
+    <loadPlaylist v-if="pl!=null"> </loadPlaylist>    
 
-  <div v-if="chantingON"> 
-    <chantingTimer></chantingTimer>
-  </div>
-    <v-fab-transition>
-      <v-btn color="purple darken-3" fab dark small fixed bottom right 
-      @click="SET_value({list: !chantingON, id: 'chantingON'})">
-        <v-icon v-if="!chantingON">mdi-account-voice</v-icon>
-        <v-icon v-if="chantingON">mdi-book-open</v-icon>
-      </v-btn>
-    </v-fab-transition>
+  
   </div>
 </template>
 
 <script>
-import chantingTimer from "@/components/explore/chanting-timer";
 import renderPlaylists from "./render-playlists";
 import loadPlaylist from "./load-playlist";
 
@@ -31,13 +20,12 @@ export default {
   },
   components: {    
     renderPlaylists,
-    loadPlaylist,
-    chantingTimer,
+    loadPlaylist,    
   },
   mounted() {    
   },
   computed: {
-    ...mapState("parameters", ["chantingON", "pl"]),
+    ...mapState("parameters", ["pl"]),
   },
   methods: {
     ...mapMutations("parameters", ["SET_value"]),

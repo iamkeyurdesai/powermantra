@@ -1,7 +1,24 @@
 <template>
   <div>
     
-    <v-card v-for="(item, i) in ownedPlaylists" :key="i" class="pa-4 mx-0 my-2">
+    <v-card v-for="(item) in ownedPlaylists" :key="item.tag" class="pa-4 mx-0 my-2">
+      <v-row justify="space-between">
+        <span>{{ item.name }}</span>
+        <playlistInfo :item="item" :mantras="mantras"></playlistInfo>
+      </v-row>
+      <v-row justify="space-between">
+        <div class="body-2 text--secondary">
+          {{ item.owner }} &#183; {{ item.mantras.length }}
+          {{ item.mantras.length > 1 ? "mantras" : "mantra" }} &#183;
+          {{ extractDHMS(item.timestamp.seconds) }}
+        </div>
+        <div class="body-2 text--secondary">
+          <v-btn x-small text @click="viewPlaylist(item)"> <v-icon>mdi-playlist-play</v-icon> </v-btn>
+        </div>
+      </v-row>
+    </v-card>
+
+    <v-card v-for="(item) in sharedPlaylists" :key="item.tag" class="pa-4 mx-0 my-2">
       <v-row justify="space-between">
         <span>{{ item.name }}</span>
         <playlistInfo :item="item" :mantras="mantras"></playlistInfo>
@@ -38,7 +55,7 @@ export default {
     playlistInfo
   },
   computed: {
-    ...mapState("firestore", ["ownedPlaylists"]),    
+    ...mapState("firestore", ["ownedPlaylists", "sharedPlaylists"]),    
     ...mapState("coretext", ["mantras"]),
   },
   mounted() {
@@ -81,6 +98,9 @@ export default {
     },
     viewPlaylist(item) {
       let playlistId = item.tag;
+      if(item.owner==auth.currentUser.displayName) {
+        this.SET_value({list: true, id: 'plOwned'})
+      }
       let myTempPath =
         // "https://powermantra.web.app" +
         "/" +
