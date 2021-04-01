@@ -21,7 +21,7 @@ const state = {
   ce: false, //chanting on for explore
   cl: false, //chanting on for library
   pl: null, //pl is passed through url for the library
-  plOwned: false, //is pl created by the user?
+  plUnauth: null, //for unauthenticated scenario store a temparory pl that can be reused
   mn: null, //mantra number in an encoded string format, name.subset$mantra_id$verse_id, 
 };
 

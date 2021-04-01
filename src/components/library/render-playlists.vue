@@ -57,15 +57,33 @@ export default {
   computed: {
     ...mapState("firestore", ["ownedPlaylists", "sharedPlaylists"]),    
     ...mapState("coretext", ["mantras"]),
+    ...mapState("parameters", ["authenticated", "pl", "plUnauth"]),
   },
   mounted() {
+    
+    if(this.authenticated) {
+    //bind owned playlists
     setTimeout(() => {
-      this.bindToFirestore("ownedPlaylists");
+      this.bindToFirestoreOwned("ownedPlaylists");
     }, 1000);
+    //bind shared playlists
+setTimeout(() => {
+      this.bindToFirestoreSharedAuth("sharedPlaylists");
+    }, 1000);
+    } else {
+      console.log(this.plUnauth)
+      if(this.plUnauth!=null) {
+            //bind shared playlists
+setTimeout(() => {
+      this.bindToFirestoreSharedUnauth("sharedPlaylists");
+    }, 1000);
+      }
+    }
   },
   methods: {
     ...mapMutations("parameters", ["SET_value"]),
-    bindToFirestore(value) {      
+
+    bindToFirestoreOwned(value) {      
       if (this[value].length == 0) {
         console.log('I am in bindToFireStore')
         this.$store.dispatch("firestore/bindUserdata", {
@@ -78,6 +96,40 @@ export default {
         console.log("ownedPlaylists already loaded");
       }
     },
+
+    //this needs to be handled differently from the unauthenticated case
+    bindToFirestoreSharedAuth(value) {
+      if (this[value].length == 0) {
+        console.log("I am in bindToFireStore");
+        this.$store.dispatch("firestore/bindUserdata", {
+          path: "playlists",
+          includQuery: true,
+          collectionGroupQuery: true,
+          query: ["tag", "==", this.pl],
+          whereToBind: value,
+        });
+        console.log(this.sharedPlaylists);
+      } else {
+        console.log("sharedPlaylists already loaded");
+      }
+    },
+
+    bindToFirestoreSharedUnauth(value) {
+      if (this[value].length == 0) {
+        console.log("I am in bindToFireStore");
+        this.$store.dispatch("firestore/bindUserdata", {
+          path: "playlists",
+          includQuery: true,
+          collectionGroupQuery: true,
+          query: ["tag", "==", this.plUnauth],
+          whereToBind: value,
+        });
+        console.log(this.sharedPlaylists);
+      } else {
+        console.log("sharedPlaylist already loaded");
+      }
+    },
+
     loadSelectedPlaylist(item) {      
       let playlistId = item.tag;
       let myTempPath = "/" + "Library" + "/" + "pl=" + playlistId;
@@ -97,10 +149,7 @@ export default {
       }
     },
     viewPlaylist(item) {
-      let playlistId = item.tag;
-      if(item.owner==auth.currentUser.displayName) {
-        this.SET_value({list: true, id: 'plOwned'})
-      }
+      let playlistId = item.tag;      
       let myTempPath =
         // "https://powermantra.web.app" +
         "/" +

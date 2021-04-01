@@ -2,8 +2,8 @@
   <div>    
       
     <renderPlaylists v-if="pl==null"> </renderPlaylists>
-    <loadPlaylist v-if="pl!=null"> </loadPlaylist>    
-
+    <loadPlaylist v-if="pl!=null & authenticated"> </loadPlaylist>    
+    <loadPlaylistUnauth v-if="pl!=null & !authenticated"> </loadPlaylistUnauth>    
   
   </div>
 </template>
@@ -11,8 +11,10 @@
 <script>
 import renderPlaylists from "./render-playlists";
 import loadPlaylist from "./load-playlist";
+import loadPlaylistUnauth from "./load-playlist-unauth";
 
 import { mapState, mapMutations } from "vuex";
+
 
 export default {
   data() {
@@ -20,12 +22,13 @@ export default {
   },
   components: {    
     renderPlaylists,
-    loadPlaylist,    
+    loadPlaylist,
+    loadPlaylistUnauth,        
   },
   mounted() {    
   },
   computed: {
-    ...mapState("parameters", ["pl"]),
+    ...mapState("parameters", ["pl", "authenticated"]),
   },
   methods: {
     ...mapMutations("parameters", ["SET_value"]),
