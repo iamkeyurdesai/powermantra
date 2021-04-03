@@ -129,7 +129,7 @@ import firebase from "firebase/app";
 export default {
   data() {
     return {
-      dialogm1: 1,
+      dialogm1: 0,
       dialog: false,
       nameBox: false,
       playlistDescription: "",
@@ -163,6 +163,7 @@ export default {
   computed: {
     // ...mapState(["firestore", "ownedPlaylists"]), //this was a bad bad mistake. wasted 5 hours.
     ...mapState("firestore", ["ownedPlaylists"]),
+    ...mapState("parameters", ["authenticated"]),
     takenPlaylistNames() {
       return this.ownedPlaylists.map((a) => a.name);
     },
@@ -221,7 +222,7 @@ export default {
         });
       this.nameBox = false;
       this.dialog = false;
-      this.$emit("saveSuccess", this.ownedPlaylists[this.dialogm1].name);
+      this.$emit("saveSuccess", this.playlistName.trim());
     },
     uniqueTag() {
       let d = new Date();
@@ -229,16 +230,16 @@ export default {
       return n + auth.currentUser.uid.slice(1, 4);
     },
     bindToFirestore(value) {
-      if (auth.currentUser != null) {
-        if (this[value].length == 0) {
-          this.$store.dispatch("firestore/bindUserdata", {
-            path: "/userdata/" + auth.currentUser.uid + "/playlists",
-            includQuery: false,
-            // query: [this.message1, this.message2, this.message3],
-            whereToBind: value,
-          });
+      if (this.authenticated) {
+      if (this[value] == null) {
+        console.log("I am in bindToFireStore " + value);
+        this.$store.dispatch("firestore/bindUserdata", {
+          path: "/userdata/" + auth.currentUser.uid + "/playlists",
+          type: "collection",
+          whereToBind: value,
+        });
         } else {
-          console.log("ownedPlaylists already loaded");
+        console.log(value + " already bound");
         }
       }
     },

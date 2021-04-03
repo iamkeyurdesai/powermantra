@@ -4,12 +4,13 @@
     <!-- <recognizeSpeech> </recognizeSpeech> -->
 
     <div v-if="!cl">
-      I am in load playlist
-      <span v-if="authenticated">
-        {{ sharedPlaylists }}
-      </span>
+      <!-- I am in load playlist -->
+      <!-- <span v-if="authenticated"> -->
+        <!-- {{ sharedPlaylists }} -->
+      <!-- </span> -->
 
-      <div v-if="sharedPlaylists.length > 0">
+      <div v-if="sharedPlaylists!=null">
+        <div v-if="sharedPlaylists.length >0">
         <renderItem
           v-for="(item, i) in sharedPlaylists[0].mantras"
           :key="i"
@@ -18,6 +19,7 @@
           :script="script"
         >
         </renderItem>
+        </div>
       </div>
       <!-- <renderList> </renderList> -->
     </div>
@@ -80,23 +82,22 @@ export default {
       this.$router.push("/Library");
     },
     bindToFirestore(value) {
-      if (this[value].length == 0) {
-        console.log("I am in bindToFireStore");
+      if (this[value] == null) {
+        console.log(value + ": I am in bindToFireStore");
         this.$store.dispatch("firestore/bindUserdata", {
           path: "playlists",
-          includQuery: true,
-          collectionGroupQuery: true,
+          type: "collectionGroup",
           query: ["tag", "==", this.pl],
           whereToBind: value,
         });
-        if (this.sharedPlaylists.length > 0) {
+        // if (this.sharedPlaylists.length > 0) {
           this.SET_value({
             list: this.pl,
             id: "plUnauth",
           });
-        }
+        // }
       } else {
-        if (this.sharedPlaylists.length > 0) {
+        if (this.sharedPlaylists != null) {
           this.SET_value({
             list: this.pl,
             id: "plUnauth",

@@ -11,6 +11,10 @@ service cloud.firestore {
       allow write: if request.auth != null && request.auth.uid == userId;
       allow read: if true;
     }
+
+    match /userdata/{userId}/track/{doc} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;      
+    }
     
     match /{somePath=**}/playlists/{playlist} {
     allow read;

@@ -136,6 +136,12 @@ export default {
     ]),
   },
   mounted() {
+    // console.log(auth)
+    // auth.onAuthStateChanged((user) => {console.log(auth.currentUser.uid, user)})
+    // setTimeout(()=>console.log(auth.currentUser.uid), 1000)
+    // let temp = auth.currentUser.uid
+    // console.log(temp)
+    // this.$nextTick((auth) => console.log(auth.currentUser.uid))
     auth.onAuthStateChanged((user) => {
       if (user) {
         this.SET_authenticated(true);

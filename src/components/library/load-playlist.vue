@@ -3,22 +3,21 @@
     <!-- explore: Coming soon... -->
     <!-- <recognizeSpeech> </recognizeSpeech> -->
 
-
     <div v-if="!cl">
       I am in load playlist
       <span v-if="authenticated">
-        {{ sharedPlaylists }}
+        {{ myPlaylist() }}
       </span>
-<div v-if="myPlaylist">
-    <renderItem  
-      v-for="(item, i) in myPlaylist.mantras"
-      :key="i"
-      :mantra="mantras[item-1]"
-      :mantra_id="item"
-      :script="script"      
-    >    
-    </renderItem>
-</div>
+      <div v-if="myPlaylist()">
+        <renderItem
+          v-for="(item, i) in myPlaylist().mantras"
+          :key="i"
+          :mantra="mantras[item - 1]"
+          :mantra_id="item"
+          :script="script"
+        >
+        </renderItem>
+      </div>
       <!-- <renderList> </renderList> -->
     </div>
 
@@ -27,19 +26,35 @@
     </div>
 
     <v-fab-transition>
-      <v-btn fab fixed bottom left icon @click="goBack()">
+      <v-btn
+        fab
+        fixed
+        bottom
+        left
+        small
+        dark
+        color="info darken-2"
+        @click="goBack()"
+      >
         <v-icon>mdi-home</v-icon>
       </v-btn>
     </v-fab-transition>
 
     <v-fab-transition>
-      <v-btn color="purple darken-3" fab dark small fixed bottom right 
-      @click="SET_value({list: !cl, id: 'cl'})">
+      <v-btn
+        color="purple darken-3"
+        fab
+        dark
+        small
+        fixed
+        bottom
+        right
+        @click="SET_value({ list: !cl, id: 'cl' })"
+      >
         <v-icon v-if="!cl">mdi-account-voice</v-icon>
         <v-icon v-if="cl">mdi-book-open</v-icon>
       </v-btn>
     </v-fab-transition>
-
   </div>
 </template>
 
@@ -47,7 +62,9 @@
 import renderItem from "@/components/explore/render-item";
 import chantingTimer from "@/components/explore/chanting-timer";
 import { mapState, mapMutations } from "vuex";
-// import {auth} from "@/main.js"
+import { db, auth } from "@/main.js";
+import firebase from 'firebase/app'
+import 'firebase/firestore'
 
 export default {
   data() {
@@ -57,50 +74,87 @@ export default {
     renderItem,
     chantingTimer,
   },
-  mounted() {
-    //     console.log(this.pl)
-    //     var mydata = db.collectionGroup('playlists').where('tag', '==', this.pl);
-    // mydata.get().then((querySnapshot) => {
-    //     querySnapshot.forEach((doc) => {
-    //         console.log(doc.id, ' => ', doc.data());
-    //     });
-    // });
-    setTimeout(() => {
-      this.bindToFirestore("sharedPlaylists");
-    }, 1000);
-  },
+  mounted() {},
   computed: {
-    ...mapState("parameters", ["pl", "authenticated", "cl",  "script"]),
+    ...mapState("parameters", ["pl", "authenticated", "cl", "script"]),
     ...mapState("firestore", ["sharedPlaylists", "ownedPlaylists"]),
-    ...mapState("coretext", ["mantras"]),
-    myPlaylist() {
-      console.log(this.sharedPlaylists)
-      let temp = this.sharedPlaylists.find(a => a.tag==this.pl)
-      if(temp.mantras.length > 0) {
-        return temp
-      } else {      
-        return this.ownedPlaylists.find(a => a.tag==this.pl)
-      } 
-    }
+    ...mapState("coretext", ["mantras"]),    
   },
   methods: {
     ...mapMutations("parameters", ["SET_value"]),
     goBack() {
       this.$router.push("/Library");
     },
-    bindToFirestore(value) {
-      if (this[value].length == 0) {
-        console.log("I am in bindToFireStore");
-        this.$store.dispatch("firestore/bindUserdata", {
-          path: "playlists",
-          includQuery: true,
-          collectionGroupQuery: true,
-          query: ["tag", "==", this.pl],
-          whereToBind: value,
+
+myPlaylist() {
+      //check for pl in sharedlist
+      //if success then return the playlist
+      if (this.sharedPlaylists != null) {
+        if (this.sharedPlaylists.length > 0) {
+          let sharedTemp = this.sharedPlaylists.find((a) => a.tag == this.pl);
+          if (sharedTemp !== undefined) {
+            return sharedTemp;
+          }
+        }
+      }
+      //check for pl in owned lists
+      //if success then return the playlist
+      if (this.ownedPlaylists != null) {
+        if (this.ownedPlaylists.length > 0) {
+          let ownedTemp = this.ownedPlaylists.find((a) => a.tag == this.pl);
+          if (ownedTemp !== undefined) {
+            return ownedTemp;
+          }
+        }
+      }
+      //get pl once through the collectiongroup query
+      //if success then
+      db.collectionGroup("playlists")
+        .where("tag", "==", this.pl)
+        .get()
+        .then((querySnapshot) => {
+          console.log('I am here AA')          
+          //update mySharedlist
+          db.collection("userdata")
+            .doc(auth.currentUser.uid)
+            .collection("track")
+            .doc("mysharedlist")
+            .update({
+              tag: firebase.firestore.FieldValue.arrayUnion(this.pl),
+            })
+            .then(() => {
+              //fire a new collectiongroup query to sync sharedPlaylists
+              this.bindToFirestoreSharedUnauth("sharedPlaylists");              
+            });
+          //return the pl obtained through the first collection group query
+          return querySnapshot[0].data();                    
         });
-        console.log(this.sharedPlaylists);
+      //default return as a filler / should be made more informative 
+      return { mantras: [1] };
+    },
+
+
+
+    //this needs to be handled differently from the unauthenticated case
+    bindToFirestoreSharedAuth(value) {
+      if (this[value] == null) {
+        if (this.mySharedList != null) {
+          if (this.mySharedList.tag.length > 0) {
+            console.log("I am in bindToFireStore " + value);
+            this.$store.dispatch("firestore/bindUserdata", {
+              path: "playlists",
+              type: "collectionGroup",
+              query: ["tag", "in", this.mySharedList.tag],
+              whereToBind: value,
+            });
+          } else {
+            console.log(value + " nothing to bind yet");
+          }
+        } else {
+          console.log(value + " mySharedList not bound yet");
+        }
       } else {
-        console.log("ownedPlaylists already loaded");
+        console.log(value + " already bound");
       }
     },
   },
@@ -115,6 +169,6 @@ export default {
   right: 16px;
 }
 .v-btn--fixed.v-btn--left {
-  left: 0px;
+  left: 16px;
 }
 </style>

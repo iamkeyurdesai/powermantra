@@ -13,21 +13,21 @@
               <v-row align="center" justify="center" class="ma-3">
               <span class="text-h5 success--text">{{ mantra.name }}</span>
               </v-row>
-              <v-row align="center" justify="space-around" class="ma-4">
-                <v-btn dark class="text-none" color="info" @click="queryDB()">
+              <v-row align="center" justify="space-around" class="ma-1">
+                <v-btn class="text-none" text>
                   <v-icon left> mdi-information </v-icon> Info
                 </v-btn>
                 <v-btn
-                  dark
-                  class="text-none" color="blue-grey darken-4"
-                  @click="showAudio = !showAudio" 
+                  text 
+                  class="text-none" 
+                  @click="showAudio = !showAudio"
                 >
-                  <v-icon left> mdi-account-voice </v-icon> Audio
+                  <v-icon left> mdi-waveform </v-icon> Audio
                   <v-icon small v-if="showAudio">mdi-check </v-icon>
                 </v-btn>
                 <v-btn
-                  dark
-                  class="text-none" color="red darken-3"
+                  text
+                  class="text-none" 
                   @click="showYoutube = !showYoutube"
                 >
                   <v-icon left> mdi-youtube </v-icon> Youtube

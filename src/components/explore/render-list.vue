@@ -23,9 +23,10 @@ export default {
     renderItem,
   },
   mounted() {
+    setTimeout( () => {
     if(this.searchSelect.length==1) {
       this.goToSelectedItem(this.searchSelect[0])
-    }
+    }}, 500)
   },
   computed: {
     ...mapState("parameters", ["searchSelect", "script"]),

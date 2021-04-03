@@ -143,7 +143,7 @@ new Vue({
     db.enablePersistence({synchronizeTabs:true}).then(()=>{
       // console.log("offline persistence enabled!")
     })
-    this.$store.dispatch('coretext/loadText')
+    this.$store.dispatch('coretext/loadText')    
     //this.$store.dispatch('firestore/bindUserdata')
   }
 }).$mount('#app')
