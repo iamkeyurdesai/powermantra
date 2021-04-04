@@ -185,10 +185,9 @@ export default {
           //return the pl obtained through the first collection group query
           //return querySnapshot[0].data();                    
         });
-      }      
-      //default return as a filler / should be made more informative 
-      //return { mantras: [1] };  
+      }            
       }
+      this.$store.state.firestore.selfURL = true
       }, 
       this.$store.state.firestore.selfURL ? 5 : 3500)            
   },

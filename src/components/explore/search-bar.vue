@@ -29,7 +29,7 @@
             >
               <span  :class="myNameStyle(i)"> {{ item.name }} </span> |
               <span  :class="myVerseTextStyle(i)"> {{ item.mantra }} || 
-              <span   v-if="item.verse_id>0">  (v-{{item.verse_id}})</span></span>
+              <span   v-if="item.verse_id>0">  (v-{{item.verse_id+1}})</span></span>
               <v-divider></v-divider>
             </div>
           </v-card>
