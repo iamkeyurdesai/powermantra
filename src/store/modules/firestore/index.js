@@ -5,7 +5,8 @@ const state = {
   // userdata: [],
   ownedPlaylists: null,
   sharedPlaylists: null,
-  mySharedList: null
+  mySharedList: null,
+  selfURL: false,
 };
 
 export default {

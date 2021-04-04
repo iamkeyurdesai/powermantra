@@ -25,9 +25,9 @@
       dismissible
       class="body-2"
       dense
-      v-if="authenticated"
+      v-if="authenticated & !this.pl"
     >      
-    Use <v-btn small text> <v-icon>mdi-plus-box-multiple</v-icon> save </v-btn> to create and <v-btn small text> <v-icon>mdi-share</v-icon>share</v-btn> your own playlist.
+    Use <v-btn small text> <v-icon>mdi-plus-box-multiple</v-icon> save </v-btn> and <v-btn small text> <v-icon>mdi-share</v-icon>share</v-btn> to create and share your own playlists.
     </v-alert>
 
 
@@ -73,13 +73,13 @@ export default {
         //if plUnauth is available then bind using it
         this.bindToFirestoreSharedUnauth("sharedPlaylists");
       }
-    }, 1000);
+    }, 500);
 
     setTimeout(() => {
       if (this.authenticated) {
         this.bindToFirestoreSharedAuth("sharedPlaylists");
       }
-    }, 2000);
+    }, 1500);
   },
   computed: {
     ...mapState("firestore", [
@@ -94,7 +94,7 @@ export default {
 
     bindToFirestoreOwned(value) {
       if (this[value] == null) {
-        console.log("I am in bindToFireStore " + value);
+        // console.log("I am in bindToFireStore " + value);
         this.$store.dispatch("firestore/bindUserdata", {
           path: "/userdata/" + auth.currentUser.uid + "/playlists",
           type: "collection",
@@ -107,8 +107,8 @@ export default {
 
     bindToFirestoreMySharedList(value) {
       if (this[value] == null) {
-        console.log("I am in bindToFireStore " + value);
-        console.log(auth.currentUser.uid);
+        // console.log("I am in bindToFireStore " + value);
+        // console.log(auth.currentUser.uid);
         this.$store.dispatch("firestore/bindUserdata", {
           path: "/userdata/" + auth.currentUser.uid + "/track/mysharedlist",
           type: "document",
@@ -117,8 +117,8 @@ export default {
       } else {
         console.log(value + " already bound");
       }
-      console.log(this[value]);
-      console.log(auth.currentUser.uid);
+      // console.log(this[value]);
+      // console.log(auth.currentUser.uid);
     },
 
     //this needs to be handled differently from the unauthenticated case
@@ -126,7 +126,7 @@ export default {
       if (this[value] == null) {
         if (this.mySharedList != null) {
           if (this.mySharedList.tag.length > 0) {
-            console.log("I am in bindToFireStore " + value);
+            // console.log("I am in bindToFireStore " + value);
             this.$store.dispatch("firestore/bindUserdata", {
               path: "playlists",
               type: "collectionGroup",

@@ -90,6 +90,7 @@ export default {
       }
     },
     viewPlaylist(item) {
+      this.$store.state.firestore.selfURL = true
       let playlistId = item.tag;      
       let myTempPath =
         // "https://powermantra.web.app" +
