@@ -14,11 +14,17 @@
               <span class="text-h5 success--text">{{ mantra.name }}</span>
               </v-row>
               <v-row align="center" justify="space-around" class="ma-1">
-                <v-btn class="text-none" text>
+                <v-btn 
+                :text="!backgroundOn" 
+                :dark="backgroundOn"
+                :class="{'info darken-1': backgroundOn}"
+                class="text-none">
                   <v-icon left> mdi-information </v-icon> Info
                 </v-btn>
                 <v-btn
-                  text 
+                  :text="!backgroundOn" 
+                  :dark="backgroundOn"
+                  :class="{'purple darken-3': backgroundOn}"
                   class="text-none" 
                   @click="showAudio = !showAudio"
                 >
@@ -26,7 +32,9 @@
                   <v-icon small v-if="showAudio">mdi-check </v-icon>
                 </v-btn>
                 <v-btn
-                  text
+                  :text="!backgroundOn" 
+                  :dark="backgroundOn"
+                  :class="{'red darken-1': backgroundOn}"
                   class="text-none" 
                   @click="showYoutube = !showYoutube"
                 >
@@ -150,7 +158,7 @@ export default {
       showYoutube: false,
       audioPlaying: null,
       isActiveItem: false,
-      backgroundOn: true
+      backgroundOn: false
     };
   },
   components: {

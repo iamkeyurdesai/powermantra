@@ -8,13 +8,30 @@
       <span v-if="authenticated">
         {{myPlaylistLocal}}
       </span> -->
-      <div class="text-center">
-      <v-progress-circular
-      indeterminate
-      color="success"      
-      v-if="!loaded"
-    ></v-progress-circular>
-      </div>
+    
+
+<v-row v-if="!loaded"
+        class="fill-height"
+        align-content="center"
+        justify="center"
+      >
+        <v-col
+          class="subtitle-1 text-center"
+          cols="12"
+        >
+          Getting your mantras
+        </v-col>
+        <v-col cols="6">
+          <v-progress-linear
+            color="deep-purple accent-4"
+            indeterminate
+            rounded
+            height="6"
+          ></v-progress-linear>
+        </v-col>
+      </v-row>
+
+
 
       <div v-if="loaded">
       <renderItem
@@ -173,7 +190,7 @@ export default {
       //return { mantras: [1] };  
       }
       }, 
-      this.$store.state.firestore.selfURL ? 10 : 3500)            
+      this.$store.state.firestore.selfURL ? 5 : 3500)            
   },
   computed: {
     ...mapState("parameters", ["pl", "authenticated", "cl", "script"]),
