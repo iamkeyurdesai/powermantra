@@ -29,7 +29,7 @@
               <template v-slot:activator="{ on, attrs }">
                 <span v-bind="attrs" v-on="on"
                   >{{ convert(item1, "primary") }}
-                </span>
+                </span>                
               </template>
               <span
                 v-for="item3 in addBr(myWords[i].split(',')[j])"
@@ -72,12 +72,11 @@
     </div>
     <div class="fsIncrease" v-html="mantra.mantraenglish[whichVerse]">
       <!-- <v-card-text  class="text--primary body-1" v-html="mantra.mantraenglish[whichVerse]">              
-      </v-card-text> -->
+      </v-card-text> -->      
     </div>
     <v-divider inset v-if="(whichVerse+1) < mantra.mantra.length" class="my-3"></v-divider>
   </div>
 </template>
-
 
 <script>
 import { mapState } from "vuex";
@@ -115,8 +114,8 @@ export default {
     this.saveSuccessMsg=true
     this.saveSuccessInfo=value
     },
-    convert(myinput, option) {
-      if (option === "primary") {
+    convert(myinput, option) {      
+      if (option === "primary") {        
         return Sanscript.t(myinput, "itrans", this.script);
       } else {
         let secondScript = "iast";
@@ -137,6 +136,7 @@ export default {
 };
 </script>
  <style lang="scss" scoped>
+
 .v-tooltip__content {
   background: rgb(230, 74, 25, 1);
   color: #f1e9e9;

@@ -43,12 +43,12 @@
           outlined
           rounded
           text
-          v-for="(item, i) in filterByOptions"
+          v-for="(item1, i) in filterByOptions"
           :key="i"
           class="text-none text--primary ma-2"                    
-          @click="findUnique(item)"
+          @click="findUnique(item1)"
         >
-          {{ item }}</v-btn
+          {{ item1 }}</v-btn
         >
       </v-col>
     </v-row>
@@ -57,14 +57,14 @@
         <div>
           <v-chip
             outlined
-            v-for="(item, i) in nextFilterOptions"
+            v-for="(item2, i) in nextFilterOptions"
             :key="i"
-            :input-value="nextFilter == item"
+            :input-value="nextFilter == item2"
             filter
             class="mr-2"
-            @click="setSearchSelect(item)"
+            @click="setSearchSelect(item2)"
           >
-            {{ item }}
+            {{ item2 }}
           </v-chip>
         </div>
       </v-col>
@@ -249,6 +249,7 @@ export default {
         });
       this.SET_value({ list: myIndices, id: "searchSelect" });
       // console.log(myIndices);
+      // console.log(this.mantras)
     },
   },
 };

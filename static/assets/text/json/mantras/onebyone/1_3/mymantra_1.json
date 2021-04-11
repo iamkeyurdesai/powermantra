@@ -1,27 +1,28 @@
 {   
     "id": 1, 
-    "name": "Gayatri Mantra",
-    "Source": "Rig Veda (Mandala 3.62.10)",
-    "Category": "Vedic mantra",
-    "Quality": "rediance",
-    "Deity": "Savitr also known as Gayatri",
-    "Meter": "Gayatri",    
+    "name": "OM",
+    "Source": "Pre Rig Veda",
+    "Category": "Beeja mantra",
+    "Quality": "expansiveness",
+    "Deity": "Brahman",
+    "Meter": "",    
     "Seer": "",
     "Shakti": "",
     "Pin": "",
-    "Application": "self-realization",
-    "Benefits": "illumination, wisdom, self-knowledge",
-    "Significance": "This highly revered mantra invokes the Sun God (Savitr) through our inner light to bless us with illumination and self-knowledge. The Gayatri mantra together with the Mahamrityunjaya mantra are considered the most special and thought to embed all of the mantra shakti. This mantra is a must before any knowledge seeking endeavor. Traditionally, this mantra was given by the teacher to the pupil as part of the threading ceremony right before starting the formal education, like a right of passage.",
-    "How to chant": "This mantra can be chanted anywhere and anytime, but it will incur the highest benefit when chanted during the early morning period (bramha muhurta). For the beginners, the correct vedic pronunciation with svaras can provide a noticeably deeper inner experience. Meditators should chant it at the beginning of their meditation session. A very common practice is to chant the gayatri mantra 108 times in a single session (one mala of Gayatri). This mantra is often used for Purashcharan (the practice of chanting the mantra 100008 times under the guidance of a spiritual guide).",
-    "Youtube": "https://www.youtube.com/watch?v=C6z2XV8G-oc", 
+    "Application": "to find mental clarity and gain self realization",
+    "Benefits": "induce relexation, build pleasant vibrations in the body, remove psychological disturbances, and make you feel connected to the source",
+    "Significance": "According to yoga scriptures, Om is the most basic, the most primordial, and the most complete sound that there is. Om consists of sounds aaa, ooo, and mmm—three fundamental units of human speech, which form the basis of almost all spoken words across all human languages. In a profoundly relaxed and deep meditative state, the human vocal organ spontaneously generates a vibratory sound similar to Om. All religions have a basic mantra that more or less resembles Om. In Hinduism, Om is so revered and valued that they say the vedas manifested from the mouth of Brahma the creator but Brahma himself manifested from Om! In Bhagavad Gita Krishna prescribes to the seekers of Moksha that they should commence all activities with (intrnal) recitation of Om. The highly celebrated Mandukya Upanishad equates the four states of consciousness (waking, dreaming, sleeping, and samadhi) with the four parts of Om (a, o, m, and the silence) and claims that grasping the true meaning of Om unravels the entire mystery of consciousness.",
+    "How to chant": "This mantra should be chanted at the beginning and the end of a meditation or yoga session. When pronoucing Om the sound A should last for 2 units of time, O for 6 units, M for 1 unit, and the silence for 6 units of time. Doing a daily mala of Om (108 repitions) is a simple yet powerful concentration practice. Relecting on the meaning of Om while reciting it first audibly and then mentally is a popular meditation technique as recommended in the Yoga Sutras of Patanjali.",
+    "Youtube": ["https://www.youtube.com/watch?v=nBFyrKYI6TU", "https://www.youtube.com/watch?v=8sYK7lm3UKg"],
+    "accent": false, 
     "mantra": [        
-        "OM, bhUrbhuvaH, svaH; tatsaviturvareNyaM; bhargo, devasya, dhImahi; dhiyo, yo, naH, prachodayAt.h"
+        "OM"
     ],    
     "wordenglish": [
-        "OM=om, bhUH=earthly plane / bhuvaH=galactice plane, svaH=celestial plane; tat=that / savitur=the Sun / vareNyaM=worshipable; bhargH=rediance, devasya=God's, dhImahi=I meditate; dhiyo=intellect, yaH=that, naH=our, prachodayAt.h=awaken"        
+        "OM=Om! The cosmic vibration!"        
     ],    
     "mantraenglish": [
-        "Om!<br> Vibration of consciousness through all three lokas! <br> I meditate on your divine rediance O Sun God! You indeed are worthy of our worship and please awaken our intellect with the knowledge of the Self!"
+        "Om!<br> The word. The sound. The vibration. The name of the source."
     ],
     "prelude": "DO NOT CHANGE",
     "preludeenglish": "DO NOT CHANGE",
