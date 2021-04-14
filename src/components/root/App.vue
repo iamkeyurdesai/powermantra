@@ -1,6 +1,9 @@
 <template>
   <v-app>
-    <v-app-bar app class="purple darken-3" dense>
+    <!-- <v-app-bar app color="#190933" dense>       -->
+      <!-- <v-app-bar app color="#1f0b40" dense>       -->
+        <v-app-bar app color="#230c47" dense>      
+        
       <v-app-bar-title>
         <v-avatar size="28px" tile>
           <img

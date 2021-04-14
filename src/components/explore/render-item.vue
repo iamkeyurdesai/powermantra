@@ -75,8 +75,8 @@
                 ></youtube>
               </div>
              
-              <v-row justify="space-between" align="center" class="ma-3">
-                <span class="info--text">Background on {{ mantra.name }}</span>
+              <v-row justify="space-between" align="center" class="ma-3"> 
+                <span class="info--text  my-5">Background on {{ mantra.name }}</span>
                 <v-btn text small rounded class="text--secondary">
                   <v-icon @click="backgroundOn = false" v-if="backgroundOn"
                     >mdi-chevron-down</v-icon

@@ -57,7 +57,13 @@ if(!file.exists("./myFilesToLoad.json")) {
 fromJSON("./myFilesToLoad.json") -> myCurrentEntries
 myCurrentEntries %>% 
   filter(myMergedFile != addEntry$myMergedFile) %>%
-  bind_rows(addEntry) -> myOutput
+  bind_rows(addEntry) %>%
+  mutate(temp = str_replace(myMergedFile, "/merged/mantra_", "")) %>% 
+  mutate(temp = str_replace(temp, ".json", "")) %>%
+  separate(temp, into = c("temp1", "temp2"), sep = "_") %>%
+  arrange(temp1) %>%
+  select(-temp1, -temp2) -> myOutput
+
 writeLines(prettify(toJSON(myOutput)), "./myFilesToLoad.json")
 print("success: updated ./myFilesToLoad.json")
 }
