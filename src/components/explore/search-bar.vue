@@ -180,7 +180,7 @@ export default {
     threshold: 1,
     resolution: 3,
         doc: {
-          id: "id",
+          id: "ix_id",
           field:  ["name" ,"mantra"],
         },
       });
@@ -189,7 +189,7 @@ export default {
       temp1.add(temp);
       //console.log(temp1.info)
       this.SET_indexMantras(temp1);
-      // console.log(temp);
+      console.log(temp);
     },
     searchQuery(val) {
       let searchResultsAll = this.indexMantras.search({

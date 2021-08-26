@@ -46,7 +46,7 @@ mergeFiles <- function(begin, end) {
 
 #create the combine file for the items in 1_3
 mergeFiles(1,3) -> addEntry
-mergeFiles(4,6) -> addEntry
+mergeFiles(4,8) -> addEntry
 #create / update the .json that keeps track of the combined files
 #the loadText() will use this file to keep track of what files to load
 library(jsonlite)
