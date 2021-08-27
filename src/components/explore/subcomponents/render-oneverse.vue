@@ -20,7 +20,7 @@
     </v-alert>
     <div class="d-flex justify-center">
       <div align="start">
-        <span v-for="(item, i) in myMantra" :key="item + i">
+        <span v-for="(item, i) in myMantra" :key="item + i" :style="{color: mytextcolors[i]}">
           <span
             v-for="(item1, j) in item.split(',')"
             :key="item1 + i + j + '_primary'"
@@ -40,11 +40,10 @@
             </v-tooltip>
           </span>
           <br />
-          <span v-if="secondScriptOn">
-            <span
+          <span v-if="secondScriptOn" class="text--secondary">
+            <span            
               v-for="(item2, k) in item.split(',')"
-              :key="item2 + i + k + '_secondary'"
-              class="text--secondary"
+              :key="item2 + i + k + '_secondary'"              
               >{{ convert(item2, "secondary") }}
             </span>
             <br
@@ -70,10 +69,12 @@
         </div>
         </div>      
     </div>
-    <div class="fsIncrease" v-html="mantra.mantraenglish[whichVerse]">
+    <!-- <div class="fsIncrease" v-html="mantra.mantraenglish[whichVerse]"> -->
       <!-- <v-card-text  class="text--primary body-1" v-html="mantra.mantraenglish[whichVerse]">              
       </v-card-text> -->      
-    </div>
+    <!-- </div> -->
+    <span v-for="(item, i) in myTranslation" :key="item + i" :style="{color: mytextcolors[i]}" v-html="item">
+    </span> 
     <v-divider inset v-if="(whichVerse+1) < mantra.mantra.length" class="my-3"></v-divider>
   </div>
 </template>
@@ -96,6 +97,7 @@ export default {
       secondScriptOn: true,
       saveSuccessMsg: false,
       saveSuccessInfo: "",
+      mytextcolors: ["#00E5FF", "#FFC400", "#76FF03", "#F48FB1"]
       // transOn: true,
     };
   },
@@ -108,6 +110,9 @@ export default {
     myWords() {
       return this.mantra.wordenglish[this.whichVerse].split(";");
     },
+    myTranslation() {
+      return this.mantra.mantraenglish[this.whichVerse].split("/")
+    }
   },
   methods: {
     saveSuccessMsgAlert(value){
